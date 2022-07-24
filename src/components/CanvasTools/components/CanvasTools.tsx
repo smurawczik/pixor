@@ -1,14 +1,13 @@
-import { BucketTool } from "./BucketTool";
+import { ToolsEnum } from "../../../redux/tools/tools.types";
+import { CanvasTool } from "./CanvasTool";
 import { ColorPicker } from "./ColorPicker";
-import { EraserTool } from "./EraserTool";
-import { PencilTool } from "./PencilTool";
 
 export const CanvasTools = () => {
   return (
     <div>
-      <PencilTool />
-      <EraserTool />
-      <BucketTool />
+      <CanvasTool tool={ToolsEnum.PENCIL}>Pencil</CanvasTool>
+      <CanvasTool tool={ToolsEnum.ERASER}>Eraser</CanvasTool>
+      <CanvasTool tool={ToolsEnum.BUCKET}>Bucket</CanvasTool>
       <ColorPicker />
     </div>
   );

@@ -70,6 +70,12 @@ export const canvasSlice = createSlice({
     ) => {
       state.palette.currentColor = action.payload;
     },
+    addColorToPaletteIfPossible: (state, action: PayloadAction<string>) => {
+      if (!action.payload || state.palette.allColors.includes(action.payload))
+        return;
+
+      state.palette.allColors.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(canvasThunkActions.draw.fulfilled, (state, action) => {
@@ -81,10 +87,6 @@ export const canvasSlice = createSlice({
       state.canvasPixelData[x][y] = {
         color,
       };
-
-      if (state.palette.allColors.includes(color)) return;
-
-      state.palette.allColors.push(color);
     });
     builder.addCase(canvasThunkActions.erase.fulfilled, (state, action) => {
       const { x, y } = action.payload;

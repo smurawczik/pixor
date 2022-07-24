@@ -6,7 +6,7 @@ import { DimensionsDialog } from "../DimensionsDialog";
 
 const StyledAppLayout = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 100px 1fr 100px;
 `;
 
 export const AppLayout = () => {

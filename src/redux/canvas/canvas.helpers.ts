@@ -1,5 +1,5 @@
 import { CANVAS_TRANSPARENT_COLOR } from "./canvas.constants";
-import { CanvasSize, CanvasSliceState } from "./canvas.types";
+import { CanvasPixelData, CanvasSize, CanvasSliceState } from "./canvas.types";
 
 // @coordinates
 export const calculateNewCoordinates = (
@@ -55,4 +55,74 @@ export const floodFill = (
   floodFill(x - 1, y, xMax, yMax, matrix, previousColor, nextColor);
   floodFill(x, y + 1, xMax, yMax, matrix, previousColor, nextColor);
   floodFill(x, y - 1, xMax, yMax, matrix, previousColor, nextColor);
+};
+
+export const drawPixelInCanvas = (
+  canvasContext: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  color: string,
+  pixelMultiplier: number
+) => {
+  canvasContext.fillStyle = color;
+  canvasContext.fillRect(
+    (x - 1) * pixelMultiplier,
+    (y - 1) * pixelMultiplier,
+    pixelMultiplier,
+    pixelMultiplier
+  );
+};
+
+export const erasePixelFromCanvas = (
+  canvasContext: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  pixelMultiplier: number
+) => {
+  canvasContext.clearRect(
+    (x - 1) * pixelMultiplier,
+    (y - 1) * pixelMultiplier,
+    pixelMultiplier,
+    pixelMultiplier
+  );
+};
+
+export const bucketPaintInCanvas = (
+  x: number,
+  y: number,
+  size: CanvasSize,
+  clonedCanvasPixelData: CanvasPixelData,
+  color: string,
+  canvasContext: CanvasRenderingContext2D,
+  pixelMultiplier: number
+) => {
+  floodFill(
+    x,
+    y,
+    size.width,
+    size.height,
+    clonedCanvasPixelData,
+    clonedCanvasPixelData?.[x]?.[y]?.color,
+    color
+  );
+
+  canvasContext.fillStyle = color;
+
+  Object.keys(clonedCanvasPixelData).forEach((xKey) => {
+    const xIndex = parseInt(xKey);
+    Object.keys(clonedCanvasPixelData[xIndex]).forEach((yKey) => {
+      const yIndex = parseInt(yKey);
+
+      if (clonedCanvasPixelData[xIndex][yIndex].color === color) {
+        canvasContext.fillRect(
+          (xIndex - 1) * pixelMultiplier,
+          (yIndex - 1) * pixelMultiplier,
+          pixelMultiplier,
+          pixelMultiplier
+        );
+      }
+    });
+  });
+
+  return clonedCanvasPixelData;
 };

@@ -26,3 +26,21 @@ export interface CanvasSliceState {
   palette: CanvasPalette;
   canvasPixelData: CanvasPixelData;
 }
+
+export type DrawCanvasPixelData = {
+  x: number;
+  y: number;
+  color: string;
+  canvasContext: CanvasRenderingContext2D;
+};
+
+export type DrawCanvasPixelDataReturnValue = Omit<
+  DrawCanvasPixelData,
+  "canvasContext"
+>;
+
+export type EraseCanvasPixelData = Omit<DrawCanvasPixelData, "color">;
+export type EraseCanvasPixelDataReturnValue = Omit<
+  EraseCanvasPixelData,
+  "canvasContext"
+>;
