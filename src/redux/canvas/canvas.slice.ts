@@ -1,17 +1,19 @@
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import chroma from "chroma-js";
 import {
   CANVAS_DIMENSION_MULTIPLIER,
   CANVAS_INITIAL_HEIGHT,
   CANVAS_INITIAL_WIDTH,
+  CANVAS_TRANSPARENT_COLOR,
 } from "./canvas.constants";
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { generateNbyMObjectMatrix } from "./canvas.helpers";
+import { canvasThunkActions } from "./canvas.thunks";
 import type {
   CanvasCoords,
   CanvasSize,
   CanvasSliceState,
 } from "./canvas.types";
-import chroma from "chroma-js";
-import { canvasThunkActions } from "./canvas.thunks";
 
 const blackInitialColor = chroma.rgb(0, 0, 0).hex();
 const initialState: CanvasSliceState = {
@@ -28,10 +30,11 @@ const initialState: CanvasSliceState = {
     currentColor: blackInitialColor,
     allColors: [blackInitialColor],
   },
-  canvasPixelData: {},
+  canvasPixelData: generateNbyMObjectMatrix(
+    CANVAS_INITIAL_WIDTH,
+    CANVAS_INITIAL_HEIGHT
+  ),
 };
-
-chroma.random();
 
 export const canvasSlice = createSlice({
   name: "canvas",
@@ -70,19 +73,25 @@ export const canvasSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(canvasThunkActions.draw.fulfilled, (state, action) => {
-      state.canvasPixelData = {
-        ...state.canvasPixelData,
-        ...action.payload,
+      const { x, y, color } = action.payload;
+      if (!color) return;
+
+      if (!state.canvasPixelData[x]) state.canvasPixelData[x] = {};
+
+      state.canvasPixelData[x][y] = {
+        color,
       };
 
-      const color = Object.values(action.payload)?.[0]?.color;
-
-      if (!color || state.palette.allColors.includes(color)) return;
+      if (state.palette.allColors.includes(color)) return;
 
       state.palette.allColors.push(color);
     });
     builder.addCase(canvasThunkActions.erase.fulfilled, (state, action) => {
-      delete state.canvasPixelData[action.payload];
+      const { x, y } = action.payload;
+      state.canvasPixelData[x][y].color = CANVAS_TRANSPARENT_COLOR;
+    });
+    builder.addCase(canvasThunkActions.bucket.fulfilled, (state, action) => {
+      state.canvasPixelData = action.payload;
     });
   },
 });

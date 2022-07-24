@@ -1,3 +1,4 @@
 export const CANVAS_INITIAL_WIDTH = 30;
 export const CANVAS_INITIAL_HEIGHT = 30;
 export const CANVAS_DIMENSION_MULTIPLIER = 10;
+export const CANVAS_TRANSPARENT_COLOR = "-";

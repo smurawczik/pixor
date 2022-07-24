@@ -17,7 +17,7 @@ export type PixelData = {
   color: string;
 };
 
-export type CanvasPixelData = Record<string, PixelData>;
+export type CanvasPixelData = Record<number, Record<number, PixelData>>;
 
 export interface CanvasSliceState {
   size: CanvasSize;

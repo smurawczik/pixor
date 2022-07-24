@@ -81,6 +81,7 @@ export const CanvasElement = () => {
                   canvasContext,
                   x,
                   y,
+                  color: currentColor,
                 })
               );
               break;
