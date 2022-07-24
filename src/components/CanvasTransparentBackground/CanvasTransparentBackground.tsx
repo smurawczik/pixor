@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { CANVAS_DIMENSION_MULTIPLIER } from "../../redux/canvas/canvas.constants";
 
 export const CanvasTransparentBackground = styled.div`
+  background-color: white;
   background-image: linear-gradient(45deg, #b0b0b0 25%, transparent 25%),
     linear-gradient(-45deg, #b0b0b0 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #b0b0b0 75%),

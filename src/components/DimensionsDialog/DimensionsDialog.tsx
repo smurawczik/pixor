@@ -1,3 +1,4 @@
+import { Input } from "@mui/material";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
 import { canvasActions } from "../../redux/canvas/canvas.slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -8,7 +9,7 @@ export const DimensionsDialog = () => {
 
   return (
     <div>
-      <input
+      <Input
         type="number"
         placeholder="width"
         value={dimensions.width}
@@ -19,7 +20,7 @@ export const DimensionsDialog = () => {
           else dispatch(canvasActions.setWidth(value));
         }}
       />
-      <input
+      <Input
         type="number"
         placeholder="height"
         value={dimensions.height}
