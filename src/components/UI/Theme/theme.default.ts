@@ -13,5 +13,5 @@ export const defaultTheme: DefaultTheme = {
     divider: "#BDBDBD",
   },
   padding: defaultPadding,
-  spacing: (padding) => `${defaultPadding * padding}px`,
+  unitInPx: (padding) => `${defaultPadding * padding}px`,
 };

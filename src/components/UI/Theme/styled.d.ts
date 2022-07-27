@@ -11,6 +11,6 @@ declare module "styled-components" {
     };
     borderRadius: string;
     padding: number;
-    spacing: (padding: number) => string;
+    unitInPx: (padding: number) => string;
   }
 }

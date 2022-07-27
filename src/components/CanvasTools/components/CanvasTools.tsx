@@ -9,30 +9,33 @@ import styled from "styled-components";
 
 const EditingTools = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: auto;
+  grid-template-columns: 40px 40px;
+  gap: 10px;
+
+  @media (min-width: 1280px) {
+    grid-template-columns: 60px 60px;
+    grid-template-rows: 60px 60px;
+  }
 `;
 
 export const CanvasTools = () => {
   return (
-    <div>
-      <div>
-        <EditingTools>
-          <CanvasTool size="small" tool={ToolsEnum.PENCIL}>
-            <BorderColorIcon />
-          </CanvasTool>
-          <CanvasTool size="small" tool={ToolsEnum.ERASER}>
-            <BackspaceIcon />
-          </CanvasTool>
-          <CanvasTool size="small" tool={ToolsEnum.BUCKET}>
-            <FormatColorFillIcon />
-          </CanvasTool>
-          <CanvasTool size="small" tool={ToolsEnum.BLUR}>
-            <BlurOnIcon />
-          </CanvasTool>
-        </EditingTools>
-      </div>
-      <ColorPicker />
-    </div>
+    <>
+      <EditingTools>
+        <CanvasTool size="small" tool={ToolsEnum.PENCIL}>
+          <BorderColorIcon />
+        </CanvasTool>
+        <CanvasTool size="small" tool={ToolsEnum.ERASER}>
+          <BackspaceIcon />
+        </CanvasTool>
+        <CanvasTool size="small" tool={ToolsEnum.BUCKET}>
+          <FormatColorFillIcon />
+        </CanvasTool>
+        <CanvasTool size="small" tool={ToolsEnum.BLUR}>
+          <BlurOnIcon />
+        </CanvasTool>
+        <ColorPicker />
+      </EditingTools>
+    </>
   );
 };

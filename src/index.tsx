@@ -1,6 +1,9 @@
+import { createTheme, ThemeProvider } from "@mui/material";
+import { indigo } from "@mui/material/colors";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
+
 import App from "./App";
 import { Theme } from "./components/UI/Theme";
 import { store } from "./redux/store";
@@ -12,12 +15,21 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Theme>
-      <Provider store={store}>
-        <GlobalStyle />
-        <App />
-      </Provider>
-    </Theme>
+    <ThemeProvider
+      theme={createTheme({
+        palette: {
+          primary: { main: indigo["500"] },
+          secondary: { main: indigo["500"] },
+        },
+      })}
+    >
+      <Theme>
+        <Provider store={store}>
+          <GlobalStyle />
+          <App />
+        </Provider>
+      </Theme>
+    </ThemeProvider>
   </React.StrictMode>
 );
 
