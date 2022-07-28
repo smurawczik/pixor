@@ -1,10 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useMedia } from "react-use";
+import styled from "styled-components";
 import { CANVAS_TRANSPARENT_COLOR } from "../../redux/canvas/canvas.constants";
 import { drawPixelInCanvas } from "../../redux/canvas/canvas.helpers";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
 import { useAppSelector } from "../../redux/hooks";
+import { CanvasPreviewDownload } from "./CanvasPreviewDownload";
+
+const StyledCanvas = styled.canvas`
+  z-index: 1;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+`;
 
 export const CanvasPreview = () => {
   const canvasPixelData = useAppSelector(canvasSelectors.getPixelData);
@@ -46,13 +56,14 @@ export const CanvasPreview = () => {
       <Typography gutterBottom variant="h6" sx={{ mt: 2, alignSelf: "start" }}>
         Preview
       </Typography>
-      <Box border="1px solid black" display="flex">
-        <canvas
+      <Box border="1px solid black" display="inline-flex">
+        <StyledCanvas
           ref={previewCanvasRef}
           width={canvasDimensions.width * CANVAS_PREVIEW_MULTIPLIER}
           height={canvasDimensions.height * CANVAS_PREVIEW_MULTIPLIER}
-        ></canvas>
+        ></StyledCanvas>
       </Box>
+      <CanvasPreviewDownload canvasElement={previewCanvasRef.current} />
     </div>
   );
 };
