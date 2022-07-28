@@ -40,7 +40,10 @@ export const canvasSlice = createSlice({
   name: "canvas",
   initialState,
   reducers: {
-    setDimensions: (state, action: PayloadAction<CanvasSize>) => {
+    setDimensions: (
+      state: CanvasSliceState,
+      action: PayloadAction<CanvasSize>
+    ) => {
       const { height, width } = action.payload;
 
       state.size = {
@@ -53,24 +56,30 @@ export const canvasSlice = createSlice({
         width: state.size.width * CANVAS_DIMENSION_MULTIPLIER,
       };
     },
-    setWidth: (state, action: PayloadAction<number>) => {
+    setWidth: (state: CanvasSliceState, action: PayloadAction<number>) => {
       state.size.width = action.payload;
       state.pixelSize.width = state.size.width * CANVAS_DIMENSION_MULTIPLIER;
     },
-    setHeight: (state, action: PayloadAction<number>) => {
+    setHeight: (state: CanvasSliceState, action: PayloadAction<number>) => {
       state.size.height = action.payload;
       state.pixelSize.height = state.size.height * CANVAS_DIMENSION_MULTIPLIER;
     },
-    setCoords: (state, action: PayloadAction<CanvasCoords>) => {
+    setCoords: (
+      state: CanvasSliceState,
+      action: PayloadAction<CanvasCoords>
+    ) => {
       state.coords = action.payload;
     },
     changeColor: (
-      state,
+      state: CanvasSliceState,
       action: PayloadAction<CanvasSliceState["palette"]["currentColor"]>
     ) => {
       state.palette.currentColor = action.payload;
     },
-    addColorToPaletteIfPossible: (state, action: PayloadAction<string>) => {
+    addColorToPaletteIfPossible: (
+      state: CanvasSliceState,
+      action: PayloadAction<string>
+    ) => {
       if (!action.payload || state.palette.allColors.includes(action.payload))
         return;
 

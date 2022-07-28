@@ -8,6 +8,7 @@ import { canvasThunkActions } from "../../../redux/canvas/canvas.thunks";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toolsSelectors } from "../../../redux/tools/tools.selectors";
 import { ToolsEnum } from "../../../redux/tools/tools.types";
+import { CANVAS_ELEMENT_ID } from "../canvas.constants";
 
 const StyledCanvas = styled.canvas`
   z-index: 1;
@@ -120,7 +121,7 @@ export const CanvasElement = () => {
     <StyledCanvas
       width={dimensions.width}
       height={dimensions.height}
-      id="canvas"
+      id={CANVAS_ELEMENT_ID}
       onMouseMove={(event) => {
         throttleSettingCoordinates(event);
         throttleCanvasAction();

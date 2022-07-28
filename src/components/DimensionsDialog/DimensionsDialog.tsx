@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
 import { canvasActions } from "../../redux/canvas/canvas.slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -8,7 +8,10 @@ export const DimensionsDialog = () => {
   const dimensions = useAppSelector(canvasSelectors.dimensions);
 
   return (
-    <Box sx={{ m: 2 }}>
+    <Box>
+      <Typography gutterBottom variant="h6">
+        Dimensions
+      </Typography>
       <TextField
         type="number"
         placeholder="width"

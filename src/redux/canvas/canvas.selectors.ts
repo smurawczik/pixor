@@ -20,10 +20,15 @@ const getAllColors = (state: RootState) => {
   return state.canvasReducer.palette.allColors;
 };
 
+const getPixelData = (state: RootState) => {
+  return state.canvasReducer.canvasPixelData;
+};
+
 export const canvasSelectors = {
   dimensions,
   pixelDimensions,
   coordinates,
   currentColor,
   getAllColors,
+  getPixelData,
 };

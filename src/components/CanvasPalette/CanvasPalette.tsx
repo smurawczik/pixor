@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useCallback } from "react";
 import styled from "styled-components";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
@@ -10,10 +10,10 @@ const StyledColor = styled.div<{ paletteColor: string; isSelected: boolean }>`
   width: 40px;
   height: 40px;
   transition: all 0.3s;
-  ${({ isSelected }) => (isSelected ? "transform: scale(0.92);" : "")}
+  ${({ isSelected }) => (isSelected ? "border: 2px inset indigo;" : "")}
 
   :hover {
-    transform: scale(0.92);
+    border: 2px inset indigo;
   }
 `;
 
@@ -30,15 +30,20 @@ export const CanvasPalette = () => {
   );
 
   return (
-    <Box display="flex" flexWrap="wrap">
-      {allColors.map((color) => (
-        <StyledColor
-          key={color}
-          paletteColor={color}
-          onClick={selectColor(color)}
-          isSelected={color === currentColor}
-        />
-      ))}
-    </Box>
+    <>
+      <Typography gutterBottom variant="h6">
+        Palette
+      </Typography>
+      <Box display="flex" flexWrap="wrap">
+        {allColors.map((color) => (
+          <StyledColor
+            key={color}
+            paletteColor={color}
+            onClick={selectColor(color)}
+            isSelected={color === currentColor}
+          />
+        ))}
+      </Box>
+    </>
   );
 };

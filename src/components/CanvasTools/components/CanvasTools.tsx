@@ -6,6 +6,7 @@ import BackspaceIcon from "@mui/icons-material/Backspace";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 import BlurOnIcon from "@mui/icons-material/BlurOn";
 import styled from "styled-components";
+import { Typography } from "@mui/material";
 
 const EditingTools = styled.div`
   display: grid;
@@ -21,6 +22,9 @@ const EditingTools = styled.div`
 export const CanvasTools = () => {
   return (
     <>
+      <Typography gutterBottom variant="h6" sx={{ mt: 2, alignSelf: "start" }}>
+        Tools
+      </Typography>
       <EditingTools>
         <CanvasTool size="small" tool={ToolsEnum.PENCIL}>
           <BorderColorIcon />

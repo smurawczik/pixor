@@ -1,12 +1,14 @@
+import { Box } from "@mui/material";
 import styled from "styled-components";
 import { Canvas } from "../Canvas";
 import { CanvasPalette } from "../CanvasPalette/CanvasPalette";
+import { CanvasPreview } from "../CanvasPreview";
 import { CanvasTools } from "../CanvasTools";
 import { DimensionsDialog } from "../DimensionsDialog";
 
 const StyledAppLayout = styled.div`
   display: grid;
-  grid-template-columns: 100px 1fr 100px;
+  grid-template-columns: 125px 1fr 125px;
   height: 100%;
 
   @media (min-width: 1280px) {
@@ -15,7 +17,6 @@ const StyledAppLayout = styled.div`
 `;
 
 const StyledAppLeftPanelWrapper = styled.div`
-  box-shadow: 0 0 0 1px indigo;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -23,25 +24,34 @@ const StyledAppLeftPanelWrapper = styled.div`
 `;
 
 const StyledAppRightPanelWrapper = styled.div`
-  box-shadow: 0 0 0 1px indigo;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 `;
 
+const StyledCanvasPaneWrapper = styled.div`
+  border-left: 2px solid indigo;
+  border-right: 2px solid indigo;
+`;
+
 export const AppLayout = () => {
   return (
     <StyledAppLayout>
       <StyledAppLeftPanelWrapper>
-        <DimensionsDialog />
-        <CanvasTools />
+        <Box sx={{ m: 2 }}>
+          <DimensionsDialog />
+          <CanvasTools />
+        </Box>
       </StyledAppLeftPanelWrapper>
-      <div>
+      <StyledCanvasPaneWrapper>
         <Canvas />
-      </div>
+      </StyledCanvasPaneWrapper>
       <StyledAppRightPanelWrapper>
-        <CanvasPalette />
+        <Box sx={{ m: 2 }}>
+          <CanvasPalette />
+          <CanvasPreview />
+        </Box>
       </StyledAppRightPanelWrapper>
     </StyledAppLayout>
   );

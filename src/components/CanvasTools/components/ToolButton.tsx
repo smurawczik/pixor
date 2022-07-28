@@ -8,5 +8,6 @@ export const ToolButton = styled(Button).withConfig({
     box-shadow: 0 0 0 2px
       ${({ isSelected, theme }) =>
         isSelected ? theme.colors.primary : "transparent"};
+    min-width: auto;
   }
 `;

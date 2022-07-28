@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import styled from "styled-components";
 import { CanvasTransparentBackground } from "../../CanvasTransparentBackground";
 import { CanvasCoords } from "./CanvasCoords";
@@ -12,7 +13,9 @@ const StyledCanvasWrapper = styled.div`
 export const Canvas = () => {
   return (
     <>
-      <CanvasCoords />
+      <Box sx={{ p: 2, borderBottom: "2px solid indigo" }}>
+        <CanvasCoords />
+      </Box>
       <StyledCanvasWrapper>
         <CanvasTransparentBackground />
         <CanvasElement />

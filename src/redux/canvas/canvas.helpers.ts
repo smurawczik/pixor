@@ -87,6 +87,30 @@ export const erasePixelFromCanvas = (
   );
 };
 
+export const drawCanvasPixelData = (
+  clonedCanvasPixelData: CanvasPixelData,
+  color: string,
+  canvasContext: CanvasRenderingContext2D,
+  pixelMultiplier: number
+) => {
+  Object.keys(clonedCanvasPixelData).forEach((xKey) => {
+    const xIndex = parseInt(xKey);
+    Object.keys(clonedCanvasPixelData[xIndex]).forEach((yKey) => {
+      const yIndex = parseInt(yKey);
+
+      if (clonedCanvasPixelData[xIndex][yIndex].color === color) {
+        drawPixelInCanvas(
+          canvasContext,
+          xIndex,
+          yIndex,
+          color,
+          pixelMultiplier
+        );
+      }
+    });
+  });
+};
+
 export const bucketPaintInCanvas = (
   x: number,
   y: number,
@@ -108,21 +132,12 @@ export const bucketPaintInCanvas = (
 
   canvasContext.fillStyle = color;
 
-  Object.keys(clonedCanvasPixelData).forEach((xKey) => {
-    const xIndex = parseInt(xKey);
-    Object.keys(clonedCanvasPixelData[xIndex]).forEach((yKey) => {
-      const yIndex = parseInt(yKey);
-
-      if (clonedCanvasPixelData[xIndex][yIndex].color === color) {
-        canvasContext.fillRect(
-          (xIndex - 1) * pixelMultiplier,
-          (yIndex - 1) * pixelMultiplier,
-          pixelMultiplier,
-          pixelMultiplier
-        );
-      }
-    });
-  });
+  drawCanvasPixelData(
+    clonedCanvasPixelData,
+    color,
+    canvasContext,
+    pixelMultiplier
+  );
 
   return clonedCanvasPixelData;
 };
