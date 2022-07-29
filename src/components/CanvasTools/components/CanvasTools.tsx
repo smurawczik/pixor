@@ -5,15 +5,17 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 import BlurOnIcon from "@mui/icons-material/BlurOn";
+import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import styled from "styled-components";
 import { Typography } from "@mui/material";
+import { LARGE_PC_BREAKPOINT } from "../../../constants";
 
 const EditingTools = styled.div`
   display: grid;
   grid-template-columns: 40px 40px;
   gap: 10px;
 
-  @media (min-width: 1280px) {
+  @media (min-width: ${LARGE_PC_BREAKPOINT}) {
     grid-template-columns: 60px 60px;
     grid-template-rows: 60px 60px;
   }
@@ -37,6 +39,11 @@ export const CanvasTools = () => {
         </CanvasTool>
         <CanvasTool size="small" tool={ToolsEnum.BLUR}>
           <BlurOnIcon />
+        </CanvasTool>
+        <CanvasTool size="small" tool={ToolsEnum.LINE}>
+          <HorizontalRuleIcon
+            sx={{ transform: "rotate(-45deg) scale(1.5, 1.5)" }}
+          />
         </CanvasTool>
         <ColorPicker />
       </EditingTools>

@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import { throttle } from "lodash";
 import { useRef } from "react";
 import styled from "styled-components";
+import { LARGE_PC_BREAKPOINT } from "../../../constants";
 import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
 import { canvasActions } from "../../../redux/canvas/canvas.slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -12,7 +13,7 @@ const StyledInputColor = styled(Button)`
     height: 40px;
     min-width: auto;
 
-    @media (min-width: 1280px) {
+    @media (min-width: ${LARGE_PC_BREAKPOINT}) {
       width: 60px;
       height: 60px;
     }

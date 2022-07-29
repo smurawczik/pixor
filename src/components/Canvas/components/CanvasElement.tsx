@@ -19,6 +19,9 @@ const StyledCanvas = styled.canvas`
 `;
 
 export const CanvasElement = () => {
+  const isLineStarted = useRef(false);
+  const isLineMoving = useRef(false);
+
   const isMouseDownRef = useRef(false);
   const dispatch = useAppDispatch();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -86,6 +89,18 @@ export const CanvasElement = () => {
                 })
               );
               break;
+            case ToolsEnum.LINE:
+              if (isLineStarted.current) {
+                dispatch(
+                  canvasThunkActions.lineMove({
+                    canvasContext,
+                    x,
+                    y,
+                    color: currentColor,
+                  })
+                ).then(() => (isLineMoving.current = true));
+              }
+              break;
           }
         }
       }
@@ -104,11 +119,43 @@ export const CanvasElement = () => {
 
   const mouseIsDown = useCallback(() => {
     isMouseDownRef.current = true;
-  }, []);
+
+    if (currentTool === ToolsEnum.LINE && !isLineStarted.current) {
+      const canvasContext = canvasRef.current?.getContext("2d");
+      const { x, y } = coordinates;
+      if (canvasContext && x && y) {
+        dispatch(
+          canvasThunkActions.lineStart({
+            canvasContext,
+            x,
+            y,
+            color: currentColor,
+          })
+        ).then(() => (isLineStarted.current = true));
+      }
+    }
+  }, [coordinates, currentColor, currentTool, dispatch]);
 
   const mouseIsUp = useCallback(() => {
     isMouseDownRef.current = false;
-  }, []);
+
+    if (currentTool === ToolsEnum.LINE && isLineMoving.current) {
+      const canvasContext = canvasRef.current?.getContext("2d");
+      const { x, y } = coordinates;
+      if (canvasContext && x && y) {
+        isLineStarted.current = false;
+        isLineMoving.current = false;
+        dispatch(
+          canvasThunkActions.lineEnd({
+            canvasContext,
+            x,
+            y,
+            color: currentColor,
+          })
+        );
+      }
+    }
+  }, [coordinates, currentColor, currentTool, dispatch]);
 
   useEffect(() => {
     document.addEventListener("mouseup", mouseIsUp);

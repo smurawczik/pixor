@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useMedia } from "react-use";
 import styled from "styled-components";
+import { LARGE_PC_BREAKPOINT } from "../../constants";
 import { CANVAS_TRANSPARENT_COLOR } from "../../redux/canvas/canvas.constants";
 import { drawPixelInCanvas } from "../../redux/canvas/canvas.helpers";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
@@ -19,7 +20,7 @@ const StyledCanvas = styled.canvas`
 export const CanvasPreview = () => {
   const canvasPixelData = useAppSelector(canvasSelectors.getPixelData);
   const canvasDimensions = useAppSelector(canvasSelectors.dimensions);
-  const isLargeScreen = useMedia("(min-width: 1280px)");
+  const isLargeScreen = useMedia(`(min-width: ${LARGE_PC_BREAKPOINT})`);
 
   const CANVAS_PREVIEW_MULTIPLIER = isLargeScreen ? 5 : 2.5;
 

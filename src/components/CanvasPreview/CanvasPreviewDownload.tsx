@@ -10,6 +10,11 @@ export const CanvasPreviewDownload: FC<{
 
   return (
     <Button
+      variant="contained"
+      size="small"
+      disableElevation
+      color="secondary"
+      sx={{ mt: 1 }}
       onClick={() => {
         var a = document.createElement("a");
         a.href = dataURL;

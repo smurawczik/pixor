@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ToolsEnum, ToolsSliceState } from "./tools.types";
 
 const initialState: ToolsSliceState = {
-  selectedTool: ToolsEnum.PENCIL,
+  selectedTool: ToolsEnum.LINE,
 };
 
 export const toolsSlice = createSlice({

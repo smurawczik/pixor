@@ -3,6 +3,7 @@ export enum ToolsEnum {
   ERASER,
   BUCKET,
   BLUR,
+  LINE,
 }
 
 export interface ToolsSliceState {

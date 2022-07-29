@@ -1,19 +1,25 @@
 import { Box, Typography } from "@mui/material";
 import { useCallback } from "react";
 import styled from "styled-components";
+import { LARGE_PC_BREAKPOINT } from "../../constants";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
 import { canvasActions } from "../../redux/canvas/canvas.slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const StyledColor = styled.div<{ paletteColor: string; isSelected: boolean }>`
   background-color: ${(props) => props.paletteColor};
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   transition: all 0.3s;
   ${({ isSelected }) => (isSelected ? "border: 2px inset indigo;" : "")}
 
   :hover {
     border: 2px inset indigo;
+  }
+
+  @media (min-width: ${LARGE_PC_BREAKPOINT}) {
+    width: 40px;
+    height: 40px;
   }
 `;
 

@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import styled from "styled-components";
+import { LARGE_PC_BREAKPOINT } from "../../constants";
 import { Canvas } from "../Canvas";
 import { CanvasPalette } from "../CanvasPalette/CanvasPalette";
 import { CanvasPreview } from "../CanvasPreview";
@@ -11,7 +12,7 @@ const StyledAppLayout = styled.div`
   grid-template-columns: 125px 1fr 125px;
   height: 100%;
 
-  @media (min-width: 1280px) {
+  @media (min-width: ${LARGE_PC_BREAKPOINT}) {
     grid-template-columns: 200px 1fr 200px;
   }
 `;

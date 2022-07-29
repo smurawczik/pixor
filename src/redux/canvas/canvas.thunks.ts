@@ -6,9 +6,11 @@ import {
   drawPixelInCanvas,
   erasePixelFromCanvas,
   bucketPaintInCanvas,
+  linePoints,
 } from "./canvas.helpers";
 import { canvasActions } from "./canvas.slice";
 import type {
+  CanvasCoords,
   CanvasPixelData,
   DrawCanvasPixelData,
   DrawCanvasPixelDataReturnValue,
@@ -78,8 +80,73 @@ const bucket = createAsyncThunk<
   );
 });
 
+const lineStart = createAsyncThunk<
+  Required<CanvasCoords>,
+  DrawCanvasPixelData,
+  {
+    // Optional fields for defining thunkApi field types
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("lineStart", (newPixelData: DrawCanvasPixelData, reduxApi) => {
+  const { x, y, color } = newPixelData;
+
+  reduxApi.dispatch(canvasActions.addColorToPaletteIfPossible(color));
+
+  return { x, y };
+});
+
+const lineMove = createAsyncThunk<
+  Required<CanvasCoords>,
+  DrawCanvasPixelData,
+  {
+    // Optional fields for defining thunkApi field types
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("lineMove", (newPixelData: DrawCanvasPixelData) => {
+  const { x, y } = newPixelData;
+
+  return { x, y };
+});
+
+const lineEnd = createAsyncThunk<
+  Required<CanvasCoords>,
+  DrawCanvasPixelData,
+  {
+    // Optional fields for defining thunkApi field types
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("lineEnd", (newPixelData: DrawCanvasPixelData, reduxApi) => {
+  const { x, y, canvasContext, color } = newPixelData;
+
+  const canvasStore = reduxApi.getState().canvasReducer;
+  if (canvasStore.drawingLineData) {
+    const { x: startX, y: startY } = canvasStore.drawingLineData.start;
+
+    canvasContext.fillStyle = color;
+
+    const points = linePoints({ x: startX, y: startY }, { x, y });
+
+    points.forEach((point) => {
+      canvasContext.fillRect(
+        (point.x - 1) * CANVAS_DIMENSION_MULTIPLIER,
+        (point.y - 1) * CANVAS_DIMENSION_MULTIPLIER,
+        CANVAS_DIMENSION_MULTIPLIER,
+        CANVAS_DIMENSION_MULTIPLIER
+      );
+    });
+  }
+
+  return { x, y };
+});
+
 export const canvasThunkActions = {
   draw,
   erase,
   bucket,
+  lineStart,
+  lineMove,
+  lineEnd,
 };

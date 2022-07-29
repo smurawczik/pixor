@@ -19,12 +19,19 @@ export type PixelData = {
 
 export type CanvasPixelData = Record<number, Record<number, PixelData>>;
 
+export type DrawingLineData = {
+  start: Required<CanvasCoords>;
+  end: Required<CanvasCoords>;
+  slope: number;
+};
+
 export interface CanvasSliceState {
   size: CanvasSize;
   pixelSize: CanvasSize;
   coords: CanvasCoords;
   palette: CanvasPalette;
   canvasPixelData: CanvasPixelData;
+  drawingLineData?: DrawingLineData;
 }
 
 export type DrawCanvasPixelData = {

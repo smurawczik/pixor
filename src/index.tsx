@@ -1,5 +1,5 @@
 import { createTheme, ThemeProvider } from "@mui/material";
-import { indigo } from "@mui/material/colors";
+import { indigo, purple } from "@mui/material/colors";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
@@ -19,7 +19,7 @@ root.render(
       theme={createTheme({
         palette: {
           primary: { main: indigo["500"] },
-          secondary: { main: indigo["500"] },
+          secondary: { main: purple["400"] },
         },
       })}
     >

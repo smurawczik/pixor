@@ -1,4 +1,7 @@
-import { CANVAS_TRANSPARENT_COLOR } from "./canvas.constants";
+import {
+  CANVAS_SCALE_FACTOR,
+  CANVAS_TRANSPARENT_COLOR,
+} from "./canvas.constants";
 import { CanvasPixelData, CanvasSize, CanvasSliceState } from "./canvas.types";
 
 // @coordinates
@@ -11,12 +14,17 @@ export const calculateNewCoordinates = (
   const rect = canvasRef.current!.getBoundingClientRect();
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
+
   const xCoord = Math.max(
-    Math.ceil((x * fakeDimensions.width) / dimensions.width),
+    Math.ceil(
+      (x * fakeDimensions.width) / dimensions.width / CANVAS_SCALE_FACTOR
+    ),
     1
   );
   const yCoord = Math.max(
-    Math.ceil((y * fakeDimensions.height) / dimensions.height),
+    Math.ceil(
+      (y * fakeDimensions.height) / dimensions.height / CANVAS_SCALE_FACTOR
+    ),
     1
   );
   return { xCoord, yCoord };
@@ -140,4 +148,47 @@ export const bucketPaintInCanvas = (
   );
 
   return clonedCanvasPixelData;
+};
+
+class Point {
+  x: any;
+  y: any;
+  constructor(x: any, y: any) {
+    this.x = x;
+    this.y = y;
+  }
+  equals(point: { x: any; y: any }) {
+    return this.x === point.x && this.y === point.y;
+  }
+}
+
+export const linePoints = (p1: any, p2: any) => {
+  /* this function calculates the points of the line with endpoints p1 &p2
+   */
+  let points = [];
+  let dx = Math.abs(p2.x - p1.x);
+  let sx = p1.x < p2.x ? 1 : -1;
+  let dy = -Math.abs(p2.y - p1.y);
+  let sy = p1.y < p2.y ? 1 : -1;
+  let err = dx + dy;
+
+  let x1 = p1.x;
+  let y1 = p1.y;
+  while (true) {
+    points.push(new Point(x1, y1));
+    if (x1 === p2.x && y1 === p2.y) {
+      break;
+    }
+    let e2 = 2 * err;
+    if (e2 >= dy) {
+      err += dy;
+      x1 += sx;
+    }
+
+    if (e2 <= dx) {
+      err += dx;
+      y1 += sy;
+    }
+  }
+  return points;
 };
