@@ -117,6 +117,8 @@ export const canvasSlice = createSlice({
       };
     });
     builder.addCase(canvasThunkActions.lineMove.fulfilled, (state, action) => {
+      state.canvasPixelData = action.payload.canvasPixelData;
+
       if (state.drawingLineData) {
         const { start } = state.drawingLineData;
         const { x, y } = action.payload;
@@ -129,27 +131,11 @@ export const canvasSlice = createSlice({
           },
           slope,
         };
-
-        // let maxSlopeX = Math.max(start.x, x);
-        // let maxSlopeY = Math.max(start.y, y);
-        // // let minSlopeX = Math.min(start.x, x);
-        // // let minSlopeY = Math.min(start.y, y);
-
-        // let counter = 0;
-
-        // console.log({ slope });
-
-        // while ((maxSlopeX !== x || maxSlopeY !== y) && counter < 50) {
-        //   maxSlopeX += slope;
-        //   maxSlopeY += slope;
-        //   // console.log({ slopedX, slopedY });
-        //   counter++;
-        // }
-
-        // counter = 0;
       }
     });
     builder.addCase(canvasThunkActions.lineEnd.fulfilled, (state, action) => {
+      state.canvasPixelData = action.payload.canvasPixelData;
+
       if (state.drawingLineData) {
         const { start } = state.drawingLineData;
         const { x, y } = action.payload;

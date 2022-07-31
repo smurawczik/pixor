@@ -15,6 +15,7 @@ export type CanvasPalette = {
 
 export type PixelData = {
   color: string;
+  lineLayerColor?: string;
 };
 
 export type CanvasPixelData = Record<number, Record<number, PixelData>>;
