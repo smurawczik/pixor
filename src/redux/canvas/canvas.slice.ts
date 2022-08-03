@@ -7,6 +7,7 @@ import {
   CANVAS_TRANSPARENT_COLOR,
 } from "./canvas.constants";
 import { generateNbyMObjectMatrix } from "./canvas.helpers";
+import { lineMoving } from "./canvas.slice.helpers";
 import { canvasThunkActions } from "./canvas.thunks";
 import type {
   CanvasCoords,
@@ -117,38 +118,10 @@ export const canvasSlice = createSlice({
       };
     });
     builder.addCase(canvasThunkActions.lineMove.fulfilled, (state, action) => {
-      state.canvasPixelData = action.payload.canvasPixelData;
-
-      if (state.drawingLineData) {
-        const { start } = state.drawingLineData;
-        const { x, y } = action.payload;
-        const slope = parseFloat(((y - start.y) / (x - start.x)).toFixed(2));
-        state.drawingLineData = {
-          ...state.drawingLineData,
-          end: {
-            x,
-            y,
-          },
-          slope,
-        };
-      }
+      lineMoving(state, action);
     });
     builder.addCase(canvasThunkActions.lineEnd.fulfilled, (state, action) => {
-      state.canvasPixelData = action.payload.canvasPixelData;
-
-      if (state.drawingLineData) {
-        const { start } = state.drawingLineData;
-        const { x, y } = action.payload;
-        const slope = Math.abs((y - start.y) / (x - start.x));
-        state.drawingLineData = {
-          ...state.drawingLineData,
-          end: {
-            x,
-            y,
-          },
-          slope,
-        };
-      }
+      lineMoving(state, action);
     });
   },
 });
