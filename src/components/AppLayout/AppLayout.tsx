@@ -2,19 +2,31 @@ import { Box } from "@mui/material";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../constants";
 import { Canvas } from "../Canvas";
+import { CanvasAnimation } from "../CanvasAnimation";
 import { CanvasPalette } from "../CanvasPalette/CanvasPalette";
 import { CanvasPreview } from "../CanvasPreview";
 import { CanvasTools } from "../CanvasTools";
 import { DimensionsDialog } from "../DimensionsDialog";
 
 const StyledAppLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const StyledAppThreeMainPanelsLayout = styled.div`
   display: grid;
   grid-template-columns: 125px 1fr 125px;
-  height: 100%;
+  flex-grow: 1.5;
 
   @media (min-width: ${LARGE_PC_BREAKPOINT}) {
     grid-template-columns: 200px 1fr 200px;
   }
+`;
+
+const StyledAppAnimationLayer = styled.div`
+  min-height: 60px;
+  border-top: 2px solid indigo;
 `;
 
 const StyledAppLeftPanelWrapper = styled.div`
@@ -39,21 +51,26 @@ const StyledCanvasPaneWrapper = styled.div`
 export const AppLayout = () => {
   return (
     <StyledAppLayout>
-      <StyledAppLeftPanelWrapper>
-        <Box sx={{ m: 2 }}>
-          <DimensionsDialog />
-          <CanvasTools />
-        </Box>
-      </StyledAppLeftPanelWrapper>
-      <StyledCanvasPaneWrapper>
-        <Canvas />
-      </StyledCanvasPaneWrapper>
-      <StyledAppRightPanelWrapper>
-        <Box sx={{ m: 2 }}>
-          <CanvasPalette />
-          <CanvasPreview />
-        </Box>
-      </StyledAppRightPanelWrapper>
+      <StyledAppThreeMainPanelsLayout>
+        <StyledAppLeftPanelWrapper>
+          <Box sx={{ m: 2 }}>
+            <DimensionsDialog />
+            <CanvasTools />
+          </Box>
+        </StyledAppLeftPanelWrapper>
+        <StyledCanvasPaneWrapper>
+          <Canvas />
+        </StyledCanvasPaneWrapper>
+        <StyledAppRightPanelWrapper>
+          <Box sx={{ m: 2 }}>
+            <CanvasPalette />
+            <CanvasPreview />
+          </Box>
+        </StyledAppRightPanelWrapper>
+      </StyledAppThreeMainPanelsLayout>
+      <StyledAppAnimationLayer>
+        <CanvasAnimation />
+      </StyledAppAnimationLayer>
     </StyledAppLayout>
   );
 };

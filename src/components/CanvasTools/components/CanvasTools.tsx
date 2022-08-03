@@ -14,6 +14,7 @@ const EditingTools = styled.div`
   display: grid;
   grid-template-columns: 40px 40px;
   gap: 10px;
+  justify-content: center;
 
   @media (min-width: ${LARGE_PC_BREAKPOINT}) {
     grid-template-columns: 60px 60px;

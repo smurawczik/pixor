@@ -59,10 +59,18 @@ export const canvasSlice = createSlice({
     setWidth: (state: CanvasSliceState, action: PayloadAction<number>) => {
       state.size.width = action.payload;
       state.pixelSize.width = state.size.width * CANVAS_DIMENSION_MULTIPLIER;
+      state.canvasPixelData = generateNbyMObjectMatrix(
+        action.payload,
+        state.size.height
+      );
     },
     setHeight: (state: CanvasSliceState, action: PayloadAction<number>) => {
       state.size.height = action.payload;
       state.pixelSize.height = state.size.height * CANVAS_DIMENSION_MULTIPLIER;
+      state.canvasPixelData = generateNbyMObjectMatrix(
+        state.size.width,
+        action.payload
+      );
     },
     setCoords: (
       state: CanvasSliceState,

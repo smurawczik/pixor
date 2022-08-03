@@ -117,8 +117,6 @@ const lineMove = createAsyncThunk<
   if (drawingLineData) {
     const { x: startX, y: startY } = drawingLineData.start;
 
-    canvasContext.fillStyle = color;
-
     const points = linePoints({ x: startX, y: startY }, { x, y });
 
     // remove previous lineLayerColor
@@ -163,6 +161,7 @@ const lineMove = createAsyncThunk<
       Object.keys(clonedCanvasPixelData[xIndex]).forEach((yKey) => {
         const yIndex = parseInt(yKey);
         if (clonedCanvasPixelData[xIndex][yIndex].lineLayerColor) {
+          canvasContext.fillStyle = color;
           canvasContext.fillRect(
             (xIndex - 1) * CANVAS_DIMENSION_MULTIPLIER,
             (yIndex - 1) * CANVAS_DIMENSION_MULTIPLIER,

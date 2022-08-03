@@ -33,7 +33,7 @@ export const ColorPicker = () => {
   const currentColor = useAppSelector(canvasSelectors.currentColor);
 
   const throttleColorChange = useRef(
-    throttle((nextValue) => dispatch(canvasActions.changeColor(nextValue)), 100)
+    throttle((nextValue) => dispatch(canvasActions.changeColor(nextValue)), 20)
   ).current;
 
   return (
