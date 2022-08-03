@@ -4,10 +4,13 @@ import styled from "styled-components";
 import { calculateNewCoordinates } from "../../../redux/canvas/canvas.helpers";
 import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
 import { canvasActions } from "../../../redux/canvas/canvas.slice";
-import { canvasThunkActions } from "../../../redux/canvas/canvas.thunks";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toolsSelectors } from "../../../redux/tools/tools.selectors";
 import { ToolsEnum } from "../../../redux/tools/tools.types";
+import { useBucketTool } from "../../CanvasTools/hooks/useBucketTool";
+import { useDrawTool } from "../../CanvasTools/hooks/useDrawTool";
+import { useEraseTool } from "../../CanvasTools/hooks/useEraseTool";
+import { useLineTool } from "../../CanvasTools/hooks/useLineTool";
 import { CANVAS_ELEMENT_ID } from "../canvas.constants";
 
 const StyledCanvas = styled.canvas`
@@ -19,17 +22,28 @@ const StyledCanvas = styled.canvas`
 `;
 
 export const CanvasElement = () => {
-  const isLineStarted = useRef(false);
-  const isLineMoving = useRef(false);
-
-  const isMouseDownRef = useRef(false);
   const dispatch = useAppDispatch();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dimensions = useAppSelector(canvasSelectors.pixelDimensions);
   const fakeDimensions = useAppSelector(canvasSelectors.dimensions);
   const coordinates = useAppSelector(canvasSelectors.coordinates);
-  const currentColor = useAppSelector(canvasSelectors.currentColor);
   const currentTool = useAppSelector(toolsSelectors.getCurrentTool);
+
+  const { onLineStart, onLineMove, onLineEnd } = useLineTool({
+    canvasContext: canvasRef.current?.getContext("2d"),
+  });
+
+  const { eraseFromCanvas } = useEraseTool({
+    canvasContext: canvasRef.current?.getContext("2d"),
+  });
+
+  const { drawInCanvas, putPenDown, putPenUp, isPenDown } = useDrawTool({
+    canvasContext: canvasRef.current?.getContext("2d"),
+  });
+
+  const { bucketPaint } = useBucketTool({
+    canvasContext: canvasRef.current?.getContext("2d"),
+  });
 
   const setNewCoordinates = useCallback(
     (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
@@ -55,57 +69,31 @@ export const CanvasElement = () => {
 
   const canvasAction = useCallback(
     (isClicking?: boolean) => {
-      const canvasContext = canvasRef.current?.getContext("2d");
-      const { x, y } = coordinates;
-      if (canvasContext && x && y) {
-        if (isMouseDownRef.current || isClicking) {
-          switch (currentTool) {
-            case ToolsEnum.PENCIL:
-              dispatch(
-                canvasThunkActions.draw({
-                  canvasContext,
-                  x,
-                  y,
-                  color: currentColor,
-                })
-              );
-              break;
-            case ToolsEnum.ERASER:
-              dispatch(
-                canvasThunkActions.erase({
-                  canvasContext,
-                  x,
-                  y,
-                })
-              );
-              break;
-            case ToolsEnum.BUCKET:
-              dispatch(
-                canvasThunkActions.bucket({
-                  canvasContext,
-                  x,
-                  y,
-                  color: currentColor,
-                })
-              );
-              break;
-            case ToolsEnum.LINE:
-              if (isLineStarted.current) {
-                dispatch(
-                  canvasThunkActions.lineMove({
-                    canvasContext,
-                    x,
-                    y,
-                    color: currentColor,
-                  })
-                ).then(() => (isLineMoving.current = true));
-              }
-              break;
-          }
+      if (isPenDown() || isClicking) {
+        switch (currentTool) {
+          case ToolsEnum.PENCIL:
+            drawInCanvas();
+            break;
+          case ToolsEnum.ERASER:
+            eraseFromCanvas();
+            break;
+          case ToolsEnum.BUCKET:
+            bucketPaint();
+            break;
+          case ToolsEnum.LINE:
+            onLineMove();
+            break;
         }
       }
     },
-    [coordinates, currentColor, currentTool, dispatch]
+    [
+      bucketPaint,
+      currentTool,
+      drawInCanvas,
+      eraseFromCanvas,
+      isPenDown,
+      onLineMove,
+    ]
   );
 
   const throttleCanvasAction = useMemo(
@@ -118,44 +106,20 @@ export const CanvasElement = () => {
   }, [dispatch]);
 
   const mouseIsDown = useCallback(() => {
-    isMouseDownRef.current = true;
+    putPenDown();
 
-    if (currentTool === ToolsEnum.LINE && !isLineStarted.current) {
-      const canvasContext = canvasRef.current?.getContext("2d");
-      const { x, y } = coordinates;
-      if (canvasContext && x && y) {
-        dispatch(
-          canvasThunkActions.lineStart({
-            canvasContext,
-            x,
-            y,
-            color: currentColor,
-          })
-        ).then(() => (isLineStarted.current = true));
-      }
+    if (currentTool === ToolsEnum.LINE) {
+      onLineStart();
     }
-  }, [coordinates, currentColor, currentTool, dispatch]);
+  }, [currentTool, onLineStart, putPenDown]);
 
   const mouseIsUp = useCallback(() => {
-    isMouseDownRef.current = false;
+    putPenUp();
 
-    if (currentTool === ToolsEnum.LINE && isLineMoving.current) {
-      const canvasContext = canvasRef.current?.getContext("2d");
-      const { x, y } = coordinates;
-      if (canvasContext && x && y) {
-        isLineStarted.current = false;
-        isLineMoving.current = false;
-        dispatch(
-          canvasThunkActions.lineEnd({
-            canvasContext,
-            x,
-            y,
-            color: currentColor,
-          })
-        );
-      }
+    if (currentTool === ToolsEnum.LINE) {
+      onLineEnd();
     }
-  }, [coordinates, currentColor, currentTool, dispatch]);
+  }, [currentTool, onLineEnd, putPenUp]);
 
   useEffect(() => {
     document.addEventListener("mouseup", mouseIsUp);
