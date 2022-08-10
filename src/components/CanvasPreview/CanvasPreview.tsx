@@ -4,7 +4,7 @@ import { useMedia } from "react-use";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../constants";
 import { CANVAS_TRANSPARENT_COLOR } from "../../redux/canvas/canvas.constants";
-import { drawPixelInCanvas } from "../../redux/canvas/canvas.helpers";
+import { drawPixelInCanvas } from "../../redux/canvas/canvas.paint.helpers";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
 import { useAppSelector } from "../../redux/hooks";
 import { CanvasPreviewDownload } from "./CanvasPreviewDownload";
@@ -22,7 +22,7 @@ export const CanvasPreview = () => {
   const canvasDimensions = useAppSelector(canvasSelectors.dimensions);
   const isLargeScreen = useMedia(`(min-width: ${LARGE_PC_BREAKPOINT})`);
 
-  const CANVAS_PREVIEW_MULTIPLIER = isLargeScreen ? 5 : 2.5;
+  const CANVAS_PREVIEW_MULTIPLIER = isLargeScreen ? 5 : 3;
 
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 

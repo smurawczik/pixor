@@ -1,16 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
 import { AppDispatch, RootState } from "./../store";
-import {
-  CANVAS_DIMENSION_MULTIPLIER,
-  CANVAS_TRANSPARENT_COLOR,
-} from "./canvas.constants";
-import {
-  bucketPaintInCanvas,
-  drawPixelInCanvas,
-  erasePixelFromCanvas,
-  linePoints,
-} from "./canvas.helpers";
+import { bucketPaintInCanvas, linePoints } from "./canvas.helpers";
 import { canvasActions } from "./canvas.slice";
 import type {
   CanvasCoords,
@@ -30,9 +21,7 @@ const draw = createAsyncThunk<
     state: RootState;
   }
 >("drawInCanvas", (canvasPixelData: DrawCanvasPixelData, reduxApi) => {
-  const { x, y, color, canvasContext } = canvasPixelData;
-
-  drawPixelInCanvas(canvasContext, x, y, color, CANVAS_DIMENSION_MULTIPLIER);
+  const { x, y, color } = canvasPixelData;
 
   reduxApi.dispatch(canvasActions.addColorToPaletteIfPossible(color));
 
@@ -47,9 +36,7 @@ const erase = createAsyncThunk<
   EraseCanvasPixelDataReturnValue,
   EraseCanvasPixelData
 >("eraseFromCanvas", (canvasPixelData: EraseCanvasPixelData) => {
-  const { x, y, canvasContext } = canvasPixelData;
-
-  erasePixelFromCanvas(canvasContext, x, y, CANVAS_DIMENSION_MULTIPLIER);
+  const { x, y } = canvasPixelData;
 
   return { x, y };
 });
@@ -64,7 +51,7 @@ const bucket = createAsyncThunk<
     state: RootState;
   }
 >("paintWithBucket", (newPixelData: DrawCanvasPixelData, reduxApi) => {
-  const { x, y, canvasContext, color } = newPixelData;
+  const { x, y, color } = newPixelData;
 
   const { canvasPixelData, size } = reduxApi.getState().canvasReducer;
 
@@ -72,15 +59,7 @@ const bucket = createAsyncThunk<
 
   reduxApi.dispatch(canvasActions.addColorToPaletteIfPossible(color));
 
-  return bucketPaintInCanvas(
-    x,
-    y,
-    size,
-    clonedCanvasPixelData,
-    color,
-    canvasContext,
-    CANVAS_DIMENSION_MULTIPLIER
-  );
+  return bucketPaintInCanvas(x, y, size, clonedCanvasPixelData, color);
 });
 
 const lineStart = createAsyncThunk<
@@ -108,7 +87,7 @@ const lineMove = createAsyncThunk<
     state: RootState;
   }
 >("lineMove", (newPixelData: DrawCanvasPixelData, reduxApi) => {
-  const { x, y, canvasContext, color } = newPixelData;
+  const { x, y, color } = newPixelData;
 
   const { drawingLineData, canvasPixelData } =
     reduxApi.getState().canvasReducer;
@@ -127,49 +106,12 @@ const lineMove = createAsyncThunk<
         if (clonedCanvasPixelData[xIndex][yIndex].lineLayerColor) {
           delete clonedCanvasPixelData[xIndex][yIndex].lineLayerColor;
         }
-
-        if (
-          clonedCanvasPixelData[xIndex][yIndex].color ===
-          CANVAS_TRANSPARENT_COLOR
-        ) {
-          erasePixelFromCanvas(
-            canvasContext,
-            xIndex,
-            yIndex,
-            CANVAS_DIMENSION_MULTIPLIER
-          );
-        } else {
-          drawPixelInCanvas(
-            canvasContext,
-            xIndex,
-            yIndex,
-            clonedCanvasPixelData[xIndex][yIndex].color,
-            CANVAS_DIMENSION_MULTIPLIER
-          );
-        }
       });
     });
 
     // add line layer colors in clonedCanvasPixelData
     points.forEach((point) => {
       clonedCanvasPixelData[point.x][point.y].lineLayerColor = color;
-    });
-
-    // remove previous lineLayerColor
-    Object.keys(clonedCanvasPixelData).forEach((xKey) => {
-      const xIndex = parseInt(xKey);
-      Object.keys(clonedCanvasPixelData[xIndex]).forEach((yKey) => {
-        const yIndex = parseInt(yKey);
-        if (clonedCanvasPixelData[xIndex][yIndex].lineLayerColor) {
-          canvasContext.fillStyle = color;
-          canvasContext.fillRect(
-            (xIndex - 1) * CANVAS_DIMENSION_MULTIPLIER,
-            (yIndex - 1) * CANVAS_DIMENSION_MULTIPLIER,
-            CANVAS_DIMENSION_MULTIPLIER,
-            CANVAS_DIMENSION_MULTIPLIER
-          );
-        }
-      });
     });
   }
 
@@ -200,12 +142,6 @@ const lineEnd = createAsyncThunk<
     const points = linePoints({ x: startX, y: startY }, { x, y });
 
     points.forEach((point) => {
-      canvasContext.fillRect(
-        (point.x - 1) * CANVAS_DIMENSION_MULTIPLIER,
-        (point.y - 1) * CANVAS_DIMENSION_MULTIPLIER,
-        CANVAS_DIMENSION_MULTIPLIER,
-        CANVAS_DIMENSION_MULTIPLIER
-      );
       delete clonedCanvasPixelData[point.x][point.y].lineLayerColor;
       clonedCanvasPixelData[point.x][point.y].color = color;
     });

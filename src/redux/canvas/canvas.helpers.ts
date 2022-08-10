@@ -65,68 +65,12 @@ export const floodFill = (
   floodFill(x, y - 1, xMax, yMax, matrix, previousColor, nextColor);
 };
 
-export const drawPixelInCanvas = (
-  canvasContext: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  color: string,
-  pixelMultiplier: number
-) => {
-  canvasContext.fillStyle = color;
-  canvasContext.fillRect(
-    (x - 1) * pixelMultiplier,
-    (y - 1) * pixelMultiplier,
-    pixelMultiplier,
-    pixelMultiplier
-  );
-};
-
-export const erasePixelFromCanvas = (
-  canvasContext: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  pixelMultiplier: number
-) => {
-  canvasContext.clearRect(
-    (x - 1) * pixelMultiplier,
-    (y - 1) * pixelMultiplier,
-    pixelMultiplier,
-    pixelMultiplier
-  );
-};
-
-export const drawCanvasPixelData = (
-  clonedCanvasPixelData: CanvasPixelData,
-  color: string,
-  canvasContext: CanvasRenderingContext2D,
-  pixelMultiplier: number
-) => {
-  Object.keys(clonedCanvasPixelData).forEach((xKey) => {
-    const xIndex = parseInt(xKey);
-    Object.keys(clonedCanvasPixelData[xIndex]).forEach((yKey) => {
-      const yIndex = parseInt(yKey);
-
-      if (clonedCanvasPixelData[xIndex][yIndex].color === color) {
-        drawPixelInCanvas(
-          canvasContext,
-          xIndex,
-          yIndex,
-          color,
-          pixelMultiplier
-        );
-      }
-    });
-  });
-};
-
 export const bucketPaintInCanvas = (
   x: number,
   y: number,
   size: CanvasSize,
   clonedCanvasPixelData: CanvasPixelData,
-  color: string,
-  canvasContext: CanvasRenderingContext2D,
-  pixelMultiplier: number
+  color: string
 ) => {
   floodFill(
     x,
@@ -136,15 +80,6 @@ export const bucketPaintInCanvas = (
     clonedCanvasPixelData,
     clonedCanvasPixelData?.[x]?.[y]?.color,
     color
-  );
-
-  canvasContext.fillStyle = color;
-
-  drawCanvasPixelData(
-    clonedCanvasPixelData,
-    color,
-    canvasContext,
-    pixelMultiplier
   );
 
   return clonedCanvasPixelData;

@@ -1,7 +1,15 @@
 import { throttle } from "lodash";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
+import {
+  CANVAS_DIMENSION_MULTIPLIER,
+  CANVAS_TRANSPARENT_COLOR,
+} from "../../../redux/canvas/canvas.constants";
 import { calculateNewCoordinates } from "../../../redux/canvas/canvas.helpers";
+import {
+  drawPixelInCanvas,
+  erasePixelFromCanvas,
+} from "../../../redux/canvas/canvas.paint.helpers";
 import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
 import { canvasActions } from "../../../redux/canvas/canvas.slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -27,6 +35,7 @@ export const CanvasElement = () => {
   const dimensions = useAppSelector(canvasSelectors.pixelDimensions);
   const fakeDimensions = useAppSelector(canvasSelectors.dimensions);
   const coordinates = useAppSelector(canvasSelectors.coordinates);
+  const canvasPixelData = useAppSelector(canvasSelectors.getPixelData);
   const currentTool = useAppSelector(toolsSelectors.getCurrentTool);
 
   const { onLineStart, onLineMove, onLineEnd } = useLineTool({
@@ -127,6 +136,40 @@ export const CanvasElement = () => {
       document.removeEventListener("mouseup", mouseIsUp);
     };
   }, [mouseIsUp]);
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      const previewCanvasContext = canvasRef.current.getContext("2d");
+
+      if (previewCanvasContext) {
+        Object.keys(canvasPixelData).forEach((x) => {
+          const intX = parseInt(x);
+          Object.keys(canvasPixelData[intX]).forEach((y) => {
+            const intY = parseInt(y);
+            const currentColorInCoordinate =
+              canvasPixelData[intX]?.[intY]?.lineLayerColor ??
+              canvasPixelData[intX]?.[intY]?.color;
+            if (currentColorInCoordinate !== CANVAS_TRANSPARENT_COLOR) {
+              drawPixelInCanvas(
+                previewCanvasContext,
+                intX,
+                intY,
+                currentColorInCoordinate,
+                CANVAS_DIMENSION_MULTIPLIER
+              );
+            } else {
+              erasePixelFromCanvas(
+                previewCanvasContext,
+                intX,
+                intY,
+                CANVAS_DIMENSION_MULTIPLIER
+              );
+            }
+          });
+        });
+      }
+    }
+  }, [canvasPixelData]);
 
   return (
     <StyledCanvas

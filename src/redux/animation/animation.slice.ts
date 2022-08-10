@@ -1,5 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+import { CANVAS_TRANSPARENT_COLOR } from "../canvas/canvas.constants";
 import { canvasThunkActions } from "../canvas/canvas.thunks";
 import {
   AnimationFrame,
@@ -49,6 +50,37 @@ export const animationSlice = createSlice({
               color,
             },
           },
+        },
+      };
+    });
+    builder.addCase(canvasThunkActions.erase.fulfilled, (state, action) => {
+      const { x, y } = action.payload;
+      state.frames[state.selectedFrame] = {
+        ...state.frames[state.selectedFrame],
+        pixelData: {
+          ...state.frames[state.selectedFrame].pixelData,
+          [x]: {
+            ...state.frames[state.selectedFrame].pixelData[x],
+            [y]: {
+              color: CANVAS_TRANSPARENT_COLOR,
+            },
+          },
+        },
+      };
+    });
+    builder.addCase(canvasThunkActions.bucket.fulfilled, (state, action) => {
+      state.frames[state.selectedFrame] = {
+        ...state.frames[state.selectedFrame],
+        pixelData: {
+          ...action.payload,
+        },
+      };
+    });
+    builder.addCase(canvasThunkActions.lineEnd.fulfilled, (state, action) => {
+      state.frames[state.selectedFrame] = {
+        ...state.frames[state.selectedFrame],
+        pixelData: {
+          ...action.payload.canvasPixelData,
         },
       };
     });

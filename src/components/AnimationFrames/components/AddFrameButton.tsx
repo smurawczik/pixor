@@ -8,7 +8,7 @@ export const AddFrameButton = () => {
 
   return (
     <Tooltip title="Add Frame">
-      <IconButton color="primary">
+      <IconButton color="primary" sx={{ mr: 1 }}>
         <AddCircleIcon fontSize={isLargeScreen ? "large" : "medium"} />
       </IconButton>
     </Tooltip>

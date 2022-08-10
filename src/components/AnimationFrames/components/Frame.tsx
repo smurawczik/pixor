@@ -6,7 +6,7 @@ import { LARGE_PC_BREAKPOINT } from "../../../constants";
 import { animationSelectors } from "../../../redux/animation/animation.selectors";
 import { AnimationFrame } from "../../../redux/animation/animation.types";
 import { CANVAS_TRANSPARENT_COLOR } from "../../../redux/canvas/canvas.constants";
-import { drawPixelInCanvas } from "../../../redux/canvas/canvas.helpers";
+import { drawPixelInCanvas } from "../../../redux/canvas/canvas.paint.helpers";
 import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
 import { useAppSelector } from "../../../redux/hooks";
 
@@ -26,7 +26,7 @@ export const Frame: FC<{ frame: AnimationFrame }> = ({ frame }) => {
   const canvasDimensions = useAppSelector(canvasSelectors.dimensions);
   const isLargeScreen = useMedia(`(min-width: ${LARGE_PC_BREAKPOINT})`);
 
-  const CANVAS_PREVIEW_MULTIPLIER = isLargeScreen ? 2.5 : 1.25;
+  const CANVAS_PREVIEW_MULTIPLIER = isLargeScreen ? 2 : 1;
 
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 

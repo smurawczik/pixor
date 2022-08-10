@@ -8,6 +8,7 @@ const StyledAnimationFrames = styled.div`
   align-items: center;
   justify-content: center;
   padding: 16px;
+  border-left: 2px solid indigo;
 `;
 
 export const AnimationFrames = () => {
