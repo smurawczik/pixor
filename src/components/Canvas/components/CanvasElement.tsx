@@ -38,6 +38,42 @@ export const CanvasElement = () => {
   const canvasPixelData = useAppSelector(canvasSelectors.getPixelData);
   const currentTool = useAppSelector(toolsSelectors.getCurrentTool);
 
+  const throttleDrawingInCanvas = useRef(
+    throttle((pixelData) => {
+      if (canvasRef.current) {
+        const previewCanvasContext = canvasRef.current.getContext("2d");
+
+        if (previewCanvasContext) {
+          Object.keys(pixelData).forEach((x) => {
+            const intX = parseInt(x);
+            Object.keys(pixelData[intX]).forEach((y) => {
+              const intY = parseInt(y);
+              const currentColorInCoordinate =
+                pixelData[intX]?.[intY]?.lineLayerColor ??
+                pixelData[intX]?.[intY]?.color;
+              if (currentColorInCoordinate !== CANVAS_TRANSPARENT_COLOR) {
+                drawPixelInCanvas(
+                  previewCanvasContext,
+                  intX,
+                  intY,
+                  currentColorInCoordinate,
+                  CANVAS_DIMENSION_MULTIPLIER
+                );
+              } else {
+                erasePixelFromCanvas(
+                  previewCanvasContext,
+                  intX,
+                  intY,
+                  CANVAS_DIMENSION_MULTIPLIER
+                );
+              }
+            });
+          });
+        }
+      }
+    }, 20)
+  ).current;
+
   const { onLineStart, onLineMove, onLineEnd } = useLineTool({
     canvasContext: canvasRef.current?.getContext("2d"),
   });
@@ -138,38 +174,8 @@ export const CanvasElement = () => {
   }, [mouseIsUp]);
 
   useEffect(() => {
-    if (canvasRef.current) {
-      const previewCanvasContext = canvasRef.current.getContext("2d");
-
-      if (previewCanvasContext) {
-        Object.keys(canvasPixelData).forEach((x) => {
-          const intX = parseInt(x);
-          Object.keys(canvasPixelData[intX]).forEach((y) => {
-            const intY = parseInt(y);
-            const currentColorInCoordinate =
-              canvasPixelData[intX]?.[intY]?.lineLayerColor ??
-              canvasPixelData[intX]?.[intY]?.color;
-            if (currentColorInCoordinate !== CANVAS_TRANSPARENT_COLOR) {
-              drawPixelInCanvas(
-                previewCanvasContext,
-                intX,
-                intY,
-                currentColorInCoordinate,
-                CANVAS_DIMENSION_MULTIPLIER
-              );
-            } else {
-              erasePixelFromCanvas(
-                previewCanvasContext,
-                intX,
-                intY,
-                CANVAS_DIMENSION_MULTIPLIER
-              );
-            }
-          });
-        });
-      }
-    }
-  }, [canvasPixelData]);
+    throttleDrawingInCanvas(canvasPixelData);
+  }, [canvasPixelData, throttleDrawingInCanvas]);
 
   return (
     <StyledCanvas
