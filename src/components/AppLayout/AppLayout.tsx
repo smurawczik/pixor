@@ -27,6 +27,10 @@ const StyledAppThreeMainPanelsLayout = styled.div`
 const StyledAppAnimationLayer = styled.div`
   min-height: 60px;
   border-top: 2px solid indigo;
+
+  @media (min-width: ${LARGE_PC_BREAKPOINT}) {
+    min-height: 100px;
+  }
 `;
 
 const StyledAppLeftPanelWrapper = styled.div`

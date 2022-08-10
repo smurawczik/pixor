@@ -3,14 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ToolsEnum, ToolsSliceState } from "./tools.types";
 
 const initialState: ToolsSliceState = {
-  selectedTool: ToolsEnum.LINE,
+  selectedTool: ToolsEnum.PENCIL,
 };
 
 export const toolsSlice = createSlice({
   name: "tools",
   initialState,
   reducers: {
-    selectTool: (state, action: PayloadAction<ToolsEnum>) => {
+    selectTool: (state: ToolsSliceState, action: PayloadAction<ToolsEnum>) => {
       state.selectedTool = action.payload;
     },
   },
