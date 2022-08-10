@@ -1,18 +1,20 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
-  CanvasSliceState,
   CanvasCoords,
-} from "/Users/yiuriel/repositories/pixor/src/redux/canvas/canvas.types";
+  CanvasPixelData,
+  CanvasSliceState,
+  DrawCanvasPixelData,
+} from "./canvas.types";
 
 export const lineMoving = (
   state: CanvasSliceState,
   action: PayloadAction<
     Required<CanvasCoords> & {
-      canvasPixelData: import("/Users/yiuriel/repositories/pixor/src/redux/canvas/canvas.types").CanvasPixelData;
+      canvasPixelData: CanvasPixelData;
     },
     string,
     {
-      arg: import("/Users/yiuriel/repositories/pixor/src/redux/canvas/canvas.types").DrawCanvasPixelData;
+      arg: DrawCanvasPixelData;
       requestId: string;
       requestStatus: "fulfilled";
     },
