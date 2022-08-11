@@ -1,3 +1,4 @@
+import { animationThunkActions } from "./../animation/animation.thunks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import chroma from "chroma-js";
 import {
@@ -130,6 +131,66 @@ export const canvasSlice = createSlice({
     });
     builder.addCase(canvasThunkActions.lineEnd.fulfilled, (state, action) => {
       lineMoving(state, action);
+    });
+    builder.addCase(
+      animationThunkActions.duplicateFrame.fulfilled,
+      (state, action) => {
+        const newCanvasMatrix = generateNbyMObjectMatrix(
+          state.size.width,
+          state.size.height
+        );
+
+        const { pixelData } = action.payload.frameToDuplicate;
+
+        Object.keys(pixelData).forEach((xKey) => {
+          const xIndex = parseInt(xKey);
+          Object.keys(pixelData[xIndex]).forEach((yKey) => {
+            const yIndex = parseInt(yKey);
+            if (
+              pixelData?.[xIndex]?.[yIndex].color &&
+              newCanvasMatrix?.[xIndex]?.[yIndex]
+            ) {
+              newCanvasMatrix[xIndex][yIndex].color =
+                pixelData[xIndex][yIndex].color;
+            }
+          });
+        });
+
+        state.canvasPixelData = newCanvasMatrix;
+      }
+    );
+    builder.addCase(
+      animationThunkActions.selectFrame.fulfilled,
+      (state, action) => {
+        const newCanvasMatrix = generateNbyMObjectMatrix(
+          state.size.width,
+          state.size.height
+        );
+
+        const { pixelData } = action.payload.frameToSelect;
+
+        Object.keys(pixelData).forEach((xKey) => {
+          const xIndex = parseInt(xKey);
+          Object.keys(pixelData[xIndex]).forEach((yKey) => {
+            const yIndex = parseInt(yKey);
+            if (
+              pixelData?.[xIndex]?.[yIndex].color &&
+              newCanvasMatrix?.[xIndex]?.[yIndex]
+            ) {
+              newCanvasMatrix[xIndex][yIndex].color =
+                pixelData[xIndex][yIndex].color;
+            }
+          });
+        });
+
+        state.canvasPixelData = newCanvasMatrix;
+      }
+    );
+    builder.addCase(animationThunkActions.addFrame.fulfilled, (state) => {
+      state.canvasPixelData = generateNbyMObjectMatrix(
+        state.size.width,
+        state.size.height
+      );
     });
   },
 });

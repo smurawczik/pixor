@@ -27,3 +27,10 @@ export const erasePixelFromCanvas = (
     pixelMultiplier
   );
 };
+
+export const clearAllCanvas = (
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D
+) => {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+};

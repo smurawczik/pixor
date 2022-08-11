@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { AddFrameButton } from "./AddFrameButton";
+import { DuplicateFrameButton } from "./DuplicateFrameButton";
 import { Frames } from "./Frames";
 
 const StyledAnimationFrames = styled.div`
@@ -11,10 +12,17 @@ const StyledAnimationFrames = styled.div`
   border-left: 2px solid indigo;
 `;
 
+const StyledFrameButtons = styled.div`
+  display: flex;
+`;
+
 export const AnimationFrames = () => {
   return (
     <StyledAnimationFrames>
-      <AddFrameButton />
+      <StyledFrameButtons>
+        <AddFrameButton />
+        <DuplicateFrameButton />
+      </StyledFrameButtons>
       <Frames />
     </StyledAnimationFrames>
   );

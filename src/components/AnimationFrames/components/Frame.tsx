@@ -1,14 +1,14 @@
-import { Box } from "@mui/material";
 import { FC, useEffect, useRef } from "react";
 import { useMedia } from "react-use";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../../constants";
 import { animationSelectors } from "../../../redux/animation/animation.selectors";
+import { animationThunkActions } from "../../../redux/animation/animation.thunks";
 import { AnimationFrame } from "../../../redux/animation/animation.types";
 import { CANVAS_TRANSPARENT_COLOR } from "../../../redux/canvas/canvas.constants";
 import { drawPixelInCanvas } from "../../../redux/canvas/canvas.paint.helpers";
 import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 
 const StyledCanvas = styled.canvas`
   z-index: 1;
@@ -18,8 +18,19 @@ const StyledCanvas = styled.canvas`
   image-rendering: crisp-edges;
 `;
 
+const StyledFrame = styled.div<{ isFrameSelected: boolean }>`
+  border: ${({ isFrameSelected }) =>
+    isFrameSelected ? "2px solid purple" : "1px solid black"};
+  margin-left: 8px;
+  margin-right: 8px;
+  display: inline-flex;
+  cursor: pointer;
+`;
+
 export const Frame: FC<{ frame: AnimationFrame }> = ({ frame }) => {
   const { index, pixelData } = frame;
+
+  const dispatch = useAppDispatch();
   const isFrameSelected = useAppSelector(
     animationSelectors.isFrameSelected(index)
   );
@@ -56,15 +67,19 @@ export const Frame: FC<{ frame: AnimationFrame }> = ({ frame }) => {
   }, [CANVAS_PREVIEW_MULTIPLIER, pixelData]);
 
   return (
-    <Box
-      border={isFrameSelected ? "2px solid purple" : "1px solid black"}
-      display="inline-flex"
+    <StyledFrame
+      isFrameSelected={isFrameSelected}
+      onClick={() =>
+        dispatch(
+          animationThunkActions.selectFrame({ frameNumberToSelect: index })
+        )
+      }
     >
       <StyledCanvas
         ref={previewCanvasRef}
         width={canvasDimensions.width * CANVAS_PREVIEW_MULTIPLIER}
         height={canvasDimensions.height * CANVAS_PREVIEW_MULTIPLIER}
       ></StyledCanvas>
-    </Box>
+    </StyledFrame>
   );
 };

@@ -8,7 +8,7 @@ export const Frames = () => {
   return (
     <div>
       {frames.map((frame) => (
-        <Frame key={frame.index} frame={frame} />
+        <Frame key={frame.id} frame={frame} />
       ))}
     </div>
   );

@@ -7,6 +7,7 @@ export enum AnimationPlayState {
 
 export type AnimationFrame = {
   pixelData: CanvasPixelData;
+  id: string;
   index: number;
 };
 
@@ -15,3 +16,27 @@ export interface AnimationSliceState {
   frames: AnimationFrame[];
   selectedFrame: number;
 }
+
+export type FrameToDuplicate = {
+  frameToDuplicate: AnimationFrame;
+};
+
+export type FrameNumberToDuplicate = {
+  frameNumberToDuplicate: number;
+};
+
+export type FrameToSelect = {
+  frameToSelect: AnimationFrame;
+};
+
+export type FrameNumberToSelect = {
+  frameNumberToSelect: number;
+};
+
+export type FrameToAdd = {
+  frameToAdd: AnimationFrame;
+};
+
+export type FrameNumberToIncrease = {
+  frameNumberToIncrease: number;
+};

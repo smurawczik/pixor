@@ -1,12 +1,8 @@
-import type { PayloadAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { CANVAS_TRANSPARENT_COLOR } from "../canvas/canvas.constants";
 import { canvasThunkActions } from "../canvas/canvas.thunks";
-import {
-  AnimationFrame,
-  AnimationPlayState,
-  AnimationSliceState,
-} from "./animation.types";
+import { animationThunkActions } from "./animation.thunks";
+import { AnimationPlayState, AnimationSliceState } from "./animation.types";
 
 const initialState: AnimationSliceState = {
   playState: AnimationPlayState.PAUSED,
@@ -14,6 +10,7 @@ const initialState: AnimationSliceState = {
     {
       index: 0,
       pixelData: {},
+      id: nanoid(),
     },
   ],
   selectedFrame: 0,
@@ -28,12 +25,6 @@ export const animationSlice = createSlice({
       action: PayloadAction<AnimationPlayState>
     ) => {
       state.playState = action.payload;
-    },
-    addFrame: (
-      state: AnimationSliceState,
-      action: PayloadAction<AnimationFrame>
-    ) => {
-      state.frames.push(action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -84,6 +75,26 @@ export const animationSlice = createSlice({
         },
       };
     });
+    builder.addCase(
+      animationThunkActions.addFrame.fulfilled,
+      (state, action) => {
+        state.frames.push(action.payload.frameToAdd);
+        state.selectedFrame = action.payload.frameToAdd.index;
+      }
+    );
+    builder.addCase(
+      animationThunkActions.duplicateFrame.fulfilled,
+      (state, action) => {
+        state.frames.push(action.payload.frameToDuplicate);
+        state.selectedFrame += 1;
+      }
+    );
+    builder.addCase(
+      animationThunkActions.selectFrame.fulfilled,
+      (state, action) => {
+        state.selectedFrame = action.payload.frameToSelect.index;
+      }
+    );
   },
 });
 

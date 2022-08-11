@@ -19,8 +19,14 @@ const isFrameSelected = (index: number) =>
     (state: AnimationSliceState) => state.selectedFrame === index
   );
 
+const selectedFrame = createSelector(
+  animationState,
+  (state: AnimationSliceState) => state.selectedFrame
+);
+
 export const animationSelectors = {
   playState,
   frames,
   isFrameSelected,
+  selectedFrame,
 };

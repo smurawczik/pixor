@@ -1,10 +1,14 @@
 import { Box, Typography } from "@mui/material";
+import { throttle } from "lodash";
 import { useEffect, useRef } from "react";
 import { useMedia } from "react-use";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../constants";
 import { CANVAS_TRANSPARENT_COLOR } from "../../redux/canvas/canvas.constants";
-import { drawPixelInCanvas } from "../../redux/canvas/canvas.paint.helpers";
+import {
+  clearAllCanvas,
+  drawPixelInCanvas,
+} from "../../redux/canvas/canvas.paint.helpers";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
 import { useAppSelector } from "../../redux/hooks";
 import { CanvasPreviewDownload } from "./CanvasPreviewDownload";
@@ -26,31 +30,38 @@ export const CanvasPreview = () => {
 
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    if (previewCanvasRef.current) {
-      const previewCanvasContext = previewCanvasRef.current.getContext("2d");
+  const throttleDrawingInCanvas = useRef(
+    throttle((pixelData) => {
+      if (previewCanvasRef.current) {
+        const previewCanvasContext = previewCanvasRef.current.getContext("2d");
 
-      if (previewCanvasContext) {
-        Object.keys(canvasPixelData).forEach((x) => {
-          const intX = parseInt(x);
-          Object.keys(canvasPixelData[intX]).forEach((y) => {
-            const intY = parseInt(y);
-            const currentColorInCoordinate =
-              canvasPixelData[intX]?.[intY]?.color;
-            if (currentColorInCoordinate !== CANVAS_TRANSPARENT_COLOR) {
-              drawPixelInCanvas(
-                previewCanvasContext,
-                intX,
-                intY,
-                currentColorInCoordinate,
-                CANVAS_PREVIEW_MULTIPLIER
-              );
-            }
+        if (previewCanvasContext) {
+          clearAllCanvas(previewCanvasRef.current, previewCanvasContext);
+
+          Object.keys(pixelData).forEach((x) => {
+            const intX = parseInt(x);
+            Object.keys(pixelData[intX]).forEach((y) => {
+              const intY = parseInt(y);
+              const currentColorInCoordinate = pixelData[intX]?.[intY]?.color;
+              if (currentColorInCoordinate !== CANVAS_TRANSPARENT_COLOR) {
+                drawPixelInCanvas(
+                  previewCanvasContext,
+                  intX,
+                  intY,
+                  currentColorInCoordinate,
+                  CANVAS_PREVIEW_MULTIPLIER
+                );
+              }
+            });
           });
-        });
+        }
       }
-    }
-  }, [CANVAS_PREVIEW_MULTIPLIER, canvasPixelData]);
+    }, 50)
+  ).current;
+
+  useEffect(() => {
+    throttleDrawingInCanvas(canvasPixelData);
+  }, [canvasPixelData, throttleDrawingInCanvas]);
 
   return (
     <div>
