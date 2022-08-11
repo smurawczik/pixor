@@ -78,15 +78,30 @@ export const animationSlice = createSlice({
     builder.addCase(
       animationThunkActions.addFrame.fulfilled,
       (state, action) => {
-        state.frames.push(action.payload.frameToAdd);
+        state.frames.splice(
+          action.payload.frameToAdd.index,
+          0,
+          action.payload.frameToAdd
+        );
         state.selectedFrame = action.payload.frameToAdd.index;
       }
     );
     builder.addCase(
       animationThunkActions.duplicateFrame.fulfilled,
       (state, action) => {
-        state.frames.push(action.payload.frameToDuplicate);
-        state.selectedFrame += 1;
+        const nextSelectedFrame = state.selectedFrame + 1;
+        state.frames.splice(
+          nextSelectedFrame,
+          0,
+          action.payload.frameToDuplicate
+        );
+        if (nextSelectedFrame < state.frames.length - 1) {
+          state.frames = state.frames.map((frame, i) => {
+            frame.index = i;
+            return frame;
+          });
+        }
+        state.selectedFrame = nextSelectedFrame;
       }
     );
     builder.addCase(

@@ -7,7 +7,7 @@ const StyledAnimationFrames = styled.div`
   height: 100%;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 16px;
   border-left: 2px solid indigo;
 `;

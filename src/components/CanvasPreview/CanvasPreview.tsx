@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { throttle } from "lodash";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMedia } from "react-use";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../constants";
@@ -25,6 +25,7 @@ export const CanvasPreview = () => {
   const canvasPixelData = useAppSelector(canvasSelectors.getPixelData);
   const canvasDimensions = useAppSelector(canvasSelectors.dimensions);
   const isLargeScreen = useMedia(`(min-width: ${LARGE_PC_BREAKPOINT})`);
+  const [dataURL, setDataURL] = useState("");
 
   const CANVAS_PREVIEW_MULTIPLIER = isLargeScreen ? 5 : 3;
 
@@ -54,6 +55,8 @@ export const CanvasPreview = () => {
               }
             });
           });
+
+          setDataURL(previewCanvasRef.current.toDataURL("image/png", 1) ?? "");
         }
       }
     }, 50)
@@ -75,7 +78,7 @@ export const CanvasPreview = () => {
           height={canvasDimensions.height * CANVAS_PREVIEW_MULTIPLIER}
         ></StyledCanvas>
       </Box>
-      <CanvasPreviewDownload canvasElement={previewCanvasRef.current} />
+      <CanvasPreviewDownload dataURL={dataURL} />
     </div>
   );
 };

@@ -2,11 +2,9 @@ import { Button } from "@mui/material";
 import { FC } from "react";
 
 export const CanvasPreviewDownload: FC<{
-  canvasElement: HTMLCanvasElement | null;
-}> = ({ canvasElement }) => {
-  if (!canvasElement) return null;
-
-  const dataURL = canvasElement.toDataURL("image/png", 1);
+  dataURL: string;
+}> = ({ dataURL }) => {
+  if (!dataURL) return null;
 
   return (
     <Button
