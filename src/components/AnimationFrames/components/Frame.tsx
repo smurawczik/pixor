@@ -24,7 +24,7 @@ const StyledCanvas = styled.canvas`
 
 const StyledFrame = styled.div<{ isFrameSelected: boolean }>`
   border: ${({ isFrameSelected }) =>
-    isFrameSelected ? "2px solid purple" : "2px solid black"};
+    isFrameSelected ? "2px solid red" : "2px solid black"};
   margin-left: 8px;
   margin-right: 8px;
   display: inline-flex;

@@ -6,12 +6,12 @@ export const CanvasCoords = () => {
 
   return (
     <div>
-      <span>
+      <div>
         x: <b>{x ? x : "-"}</b>
-      </span>
-      <span>
+      </div>
+      <div>
         y: <b>{y ? y : "-"}</b>
-      </span>
+      </div>
     </div>
   );
 };

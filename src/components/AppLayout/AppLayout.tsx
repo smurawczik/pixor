@@ -16,11 +16,11 @@ const StyledAppLayout = styled.div`
 
 const StyledAppThreeMainPanelsLayout = styled.div`
   display: grid;
-  grid-template-columns: 125px 1fr 125px;
+  grid-template-columns: 125px 1fr minmax(max-content, 125px);
   flex-grow: 1.5;
 
   @media (min-width: ${LARGE_PC_BREAKPOINT}) {
-    grid-template-columns: 200px 1fr 200px;
+    grid-template-columns: 200px 1fr minmax(max-content, 200px);
   }
 `;
 
@@ -50,6 +50,8 @@ const StyledAppRightPanelWrapper = styled.div`
 const StyledCanvasPaneWrapper = styled.div`
   border-left: 2px solid indigo;
   border-right: 2px solid indigo;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const AppLayout = () => {

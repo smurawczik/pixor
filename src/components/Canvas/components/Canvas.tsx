@@ -1,10 +1,14 @@
-import { Box } from "@mui/material";
 import styled from "styled-components";
 import { CANVAS_SCALE_FACTOR } from "../../../redux/canvas/canvas.constants";
 import { CanvasTransparentBackground } from "../../CanvasTransparentBackground";
 import { CanvasCoords } from "./CanvasCoords";
 
 import { CanvasElement } from "./CanvasElement";
+
+const StyledCanvasCoordsWrapper = styled.div`
+  padding: 16px;
+  border-bottom: 2px solid indigo;
+`;
 
 const StyledCanvasWrapper = styled.div`
   display: inline-flex;
@@ -14,16 +18,24 @@ const StyledCanvasWrapper = styled.div`
   transform: scale(${CANVAS_SCALE_FACTOR}, ${CANVAS_SCALE_FACTOR});
 `;
 
+const StyledCanvasOverflowWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+`;
+
 export const Canvas = () => {
   return (
     <>
-      <Box sx={{ p: 2, borderBottom: "2px solid indigo" }}>
+      <StyledCanvasCoordsWrapper>
         <CanvasCoords />
-      </Box>
-      <StyledCanvasWrapper>
-        <CanvasTransparentBackground />
-        <CanvasElement />
-      </StyledCanvasWrapper>
+      </StyledCanvasCoordsWrapper>
+      <StyledCanvasOverflowWrapper>
+        <StyledCanvasWrapper>
+          <CanvasTransparentBackground />
+          <CanvasElement />
+        </StyledCanvasWrapper>
+      </StyledCanvasOverflowWrapper>
     </>
   );
 };

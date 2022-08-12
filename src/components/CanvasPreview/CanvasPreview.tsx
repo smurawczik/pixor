@@ -67,7 +67,7 @@ export const CanvasPreview = () => {
   }, [canvasPixelData, throttleDrawingInCanvas]);
 
   return (
-    <div>
+    <Box display="flex" flexDirection="column">
       <Typography gutterBottom variant="h6" sx={{ mt: 2, alignSelf: "start" }}>
         Preview
       </Typography>
@@ -79,6 +79,6 @@ export const CanvasPreview = () => {
         ></StyledCanvas>
       </Box>
       <CanvasPreviewDownload dataURL={dataURL} />
-    </div>
+    </Box>
   );
 };
