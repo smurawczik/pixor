@@ -1,3 +1,5 @@
+import { AsyncThunk } from "@reduxjs/toolkit";
+
 export type CanvasSize = {
   width: number;
   height: number;
@@ -52,3 +54,6 @@ export type EraseCanvasPixelDataReturnValue = Omit<
   EraseCanvasPixelData,
   "canvasContext"
 >;
+
+export type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
+export type FulfilledAction = ReturnType<GenericAsyncThunk["fulfilled"]>;

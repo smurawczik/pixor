@@ -44,6 +44,20 @@ export const animationSlice = createSlice({
         },
       };
     });
+    builder.addCase(
+      canvasThunkActions.blurFinish.fulfilled,
+      (state, action) => {
+        const { canvasPixelData } = action.payload;
+
+        state.frames[state.selectedFrame] = {
+          ...state.frames[state.selectedFrame],
+          pixelData: {
+            ...state.frames[state.selectedFrame].pixelData,
+            ...canvasPixelData,
+          },
+        };
+      }
+    );
     builder.addCase(canvasThunkActions.erase.fulfilled, (state, action) => {
       const { x, y } = action.payload;
       state.frames[state.selectedFrame] = {
@@ -106,6 +120,12 @@ export const animationSlice = createSlice({
     );
     builder.addCase(
       animationThunkActions.selectFrame.fulfilled,
+      (state, action) => {
+        state.selectedFrame = action.payload.frameToSelect.index;
+      }
+    );
+    builder.addCase(
+      animationThunkActions.selectNextFrame.fulfilled,
       (state, action) => {
         state.selectedFrame = action.payload.frameToSelect.index;
       }

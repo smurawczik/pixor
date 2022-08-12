@@ -1,6 +1,7 @@
-import { animationThunkActions } from "./../animation/animation.thunks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import chroma from "chroma-js";
+import { clone } from "lodash";
+import { animationThunkActions } from "./../animation/animation.thunks";
 import {
   CANVAS_DIMENSION_MULTIPLIER,
   CANVAS_INITIAL_HEIGHT,
@@ -11,10 +12,15 @@ import {
   generateNbyMObjectMatrix,
   generateNbyMObjectMatrixWithPreviousData,
 } from "./canvas.helpers";
-import { lineMoving } from "./canvas.slice.helpers";
+import {
+  blurPixel,
+  frameSelectionInCanvas,
+  lineMoving,
+} from "./canvas.slice.helpers";
 import { canvasThunkActions } from "./canvas.thunks";
 import type {
   CanvasCoords,
+  CanvasPixelData,
   CanvasSize,
   CanvasSliceState,
 } from "./canvas.types";
@@ -101,108 +107,113 @@ export const canvasSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(canvasThunkActions.draw.fulfilled, (state, action) => {
-      const { x, y, color } = action.payload;
-      if (!color) return;
+    builder
+      .addCase(canvasThunkActions.draw.fulfilled, (state, action) => {
+        const { x, y, color } = action.payload;
+        if (!color) return;
 
-      state.canvasPixelData[x][y] = {
-        color,
-      };
-    });
-    builder.addCase(canvasThunkActions.blur.fulfilled, (state, action) => {
-      const { x, y, color } = action.payload;
-      if (!color) return;
+        state.canvasPixelData[x][y] = {
+          color,
+        };
+      })
+      .addCase(canvasThunkActions.blur.fulfilled, (state, action) => {
+        const { x, y, color } = action.payload;
+        if (!color) return;
 
-      state.canvasPixelData[x][y] = {
-        color,
-      };
-    });
-    builder.addCase(canvasThunkActions.erase.fulfilled, (state, action) => {
-      const { x, y } = action.payload;
-      state.canvasPixelData[x][y].color = CANVAS_TRANSPARENT_COLOR;
-    });
-    builder.addCase(canvasThunkActions.bucket.fulfilled, (state, action) => {
-      state.canvasPixelData = action.payload;
-    });
-    builder.addCase(canvasThunkActions.lineStart.fulfilled, (state, action) => {
-      state.drawingLineData = {
-        start: {
-          x: action.payload.x,
-          y: action.payload.y,
-        },
-        end: {
-          x: action.payload.x,
-          y: action.payload.y,
-        },
-        slope: 1,
-      };
-    });
-    builder.addCase(canvasThunkActions.lineMove.fulfilled, (state, action) => {
-      lineMoving(state, action);
-    });
-    builder.addCase(canvasThunkActions.lineEnd.fulfilled, (state, action) => {
-      lineMoving(state, action);
-    });
-    builder.addCase(
-      animationThunkActions.duplicateFrame.fulfilled,
-      (state, action) => {
-        const newCanvasMatrix = generateNbyMObjectMatrix(
+        const pixelColor = state.canvasPixelData?.[x]?.[y].color;
+        const clonedCanvasPixelData = clone<CanvasPixelData>(
+          state.canvasPixelData
+        );
+
+        let nextPixelData = blurPixel(
+          clonedCanvasPixelData,
+          pixelColor,
+          x - 1,
+          y
+        );
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x - 1, y + 1);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x, y + 1);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x + 1, y + 1);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x + 1, y);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x + 1, y - 1);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x, y - 1);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x - 1, y - 1);
+
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x - 2, y);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x + 2, y);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x, y - 2);
+        nextPixelData = blurPixel(nextPixelData, pixelColor, x, y + 2);
+
+        state.canvasPixelData = nextPixelData;
+      })
+      .addCase(canvasThunkActions.erase.fulfilled, (state, action) => {
+        const { x, y } = action.payload;
+        state.canvasPixelData[x][y].color = CANVAS_TRANSPARENT_COLOR;
+      })
+      .addCase(canvasThunkActions.bucket.fulfilled, (state, action) => {
+        state.canvasPixelData = action.payload;
+      })
+      .addCase(canvasThunkActions.lineStart.fulfilled, (state, action) => {
+        state.drawingLineData = {
+          start: {
+            x: action.payload.x,
+            y: action.payload.y,
+          },
+          end: {
+            x: action.payload.x,
+            y: action.payload.y,
+          },
+          slope: 1,
+        };
+      })
+      .addCase(canvasThunkActions.lineMove.fulfilled, (state, action) => {
+        lineMoving(state, action);
+      })
+      .addCase(canvasThunkActions.lineEnd.fulfilled, (state, action) => {
+        lineMoving(state, action);
+      })
+      .addCase(
+        animationThunkActions.duplicateFrame.fulfilled,
+        (state, action) => {
+          const newCanvasMatrix = generateNbyMObjectMatrix(
+            state.size.width,
+            state.size.height
+          );
+
+          const { pixelData } = action.payload.frameToDuplicate;
+
+          Object.keys(pixelData).forEach((xKey) => {
+            const xIndex = parseInt(xKey);
+            Object.keys(pixelData[xIndex]).forEach((yKey) => {
+              const yIndex = parseInt(yKey);
+              if (
+                pixelData?.[xIndex]?.[yIndex].color &&
+                newCanvasMatrix?.[xIndex]?.[yIndex]
+              ) {
+                newCanvasMatrix[xIndex][yIndex].color =
+                  pixelData[xIndex][yIndex].color;
+              }
+            });
+          });
+
+          state.canvasPixelData = newCanvasMatrix;
+        }
+      )
+      .addCase(animationThunkActions.selectFrame.fulfilled, (state, action) => {
+        frameSelectionInCanvas(state, action);
+      })
+      .addCase(
+        animationThunkActions.selectNextFrame.fulfilled,
+        (state, action) => {
+          frameSelectionInCanvas(state, action);
+        }
+      )
+      .addCase(animationThunkActions.addFrame.fulfilled, (state) => {
+        state.canvasPixelData = generateNbyMObjectMatrix(
           state.size.width,
           state.size.height
         );
-
-        const { pixelData } = action.payload.frameToDuplicate;
-
-        Object.keys(pixelData).forEach((xKey) => {
-          const xIndex = parseInt(xKey);
-          Object.keys(pixelData[xIndex]).forEach((yKey) => {
-            const yIndex = parseInt(yKey);
-            if (
-              pixelData?.[xIndex]?.[yIndex].color &&
-              newCanvasMatrix?.[xIndex]?.[yIndex]
-            ) {
-              newCanvasMatrix[xIndex][yIndex].color =
-                pixelData[xIndex][yIndex].color;
-            }
-          });
-        });
-
-        state.canvasPixelData = newCanvasMatrix;
-      }
-    );
-    builder.addCase(
-      animationThunkActions.selectFrame.fulfilled,
-      (state, action) => {
-        const newCanvasMatrix = generateNbyMObjectMatrix(
-          state.size.width,
-          state.size.height
-        );
-
-        const { pixelData } = action.payload.frameToSelect;
-
-        Object.keys(pixelData).forEach((xKey) => {
-          const xIndex = parseInt(xKey);
-          Object.keys(pixelData[xIndex]).forEach((yKey) => {
-            const yIndex = parseInt(yKey);
-            if (
-              pixelData?.[xIndex]?.[yIndex].color &&
-              newCanvasMatrix?.[xIndex]?.[yIndex]
-            ) {
-              newCanvasMatrix[xIndex][yIndex].color =
-                pixelData[xIndex][yIndex].color;
-            }
-          });
-        });
-
-        state.canvasPixelData = newCanvasMatrix;
-      }
-    );
-    builder.addCase(animationThunkActions.addFrame.fulfilled, (state) => {
-      state.canvasPixelData = generateNbyMObjectMatrix(
-        state.size.width,
-        state.size.height
-      );
-    });
+      });
   },
 });
 

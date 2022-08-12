@@ -20,6 +20,7 @@ import { useBucketTool } from "../../CanvasTools/hooks/useBucketTool";
 import { useDrawTool } from "../../CanvasTools/hooks/useDrawTool";
 import { useEraseTool } from "../../CanvasTools/hooks/useEraseTool";
 import { useLineTool } from "../../CanvasTools/hooks/useLineTool";
+import { usePenTool } from "../../CanvasTools/hooks/usePenTool";
 import { CANVAS_ELEMENT_ID } from "../canvas.constants";
 
 const StyledCanvas = styled.canvas`
@@ -75,24 +76,31 @@ export const CanvasElement = () => {
     }, 20)
   ).current;
 
+  const { isPenDown, putPenUp, putPenDown } = usePenTool();
+
   const { onLineStart, onLineMove, onLineEnd } = useLineTool({
     canvasContext: canvasRef.current?.getContext("2d"),
+    isPenDown: isPenDown(),
   });
 
   const { eraseFromCanvas } = useEraseTool({
     canvasContext: canvasRef.current?.getContext("2d"),
+    isPenDown: isPenDown(),
   });
 
-  const { drawInCanvas, putPenDown, putPenUp, isPenDown } = useDrawTool({
+  const { drawInCanvas } = useDrawTool({
     canvasContext: canvasRef.current?.getContext("2d"),
+    isPenDown: isPenDown(),
   });
 
   const { blurPixelInCanvas } = useBlurTool({
     canvasContext: canvasRef.current?.getContext("2d"),
+    isPenDown: isPenDown(),
   });
 
   const { bucketPaint } = useBucketTool({
     canvasContext: canvasRef.current?.getContext("2d"),
+    isPenDown: isPenDown(),
   });
 
   const setNewCoordinates = useCallback(

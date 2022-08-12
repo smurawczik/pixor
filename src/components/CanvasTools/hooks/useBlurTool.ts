@@ -21,7 +21,9 @@ export const useBlurTool = ({ canvasContext }: UseBlurToolParams) => {
           y,
           color,
         })
-      );
+      ).finally(() => {
+        dispatch(canvasThunkActions.blurFinish());
+      });
     }
   }, [canvasContext, color, coordinates, dispatch]);
 

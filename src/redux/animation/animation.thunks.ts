@@ -26,6 +26,24 @@ const selectFrame = createAsyncThunk<
   };
 });
 
+const selectNextFrame = createAsyncThunk<
+  FrameToSelect,
+  FrameNumberToSelect,
+  {
+    // Optional fields for defining thunkApi field types
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("selectNextAnimationFrame", ({ frameNumberToSelect }, reduxApi) => {
+  const nextSelectedFrame =
+    reduxApi.getState().animationReducer.frames?.[frameNumberToSelect] ??
+    reduxApi.getState().animationReducer.frames[0];
+
+  return {
+    frameToSelect: nextSelectedFrame,
+  };
+});
+
 const addFrame = createAsyncThunk<
   FrameToAdd,
   FrameNumberToIncrease,
@@ -65,4 +83,5 @@ export const animationThunkActions = {
   addFrame,
   duplicateFrame,
   selectFrame,
+  selectNextFrame,
 };

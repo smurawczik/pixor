@@ -50,6 +50,20 @@ const blur = createAsyncThunk<
   };
 });
 
+const blurFinish = createAsyncThunk<
+  { canvasPixelData: CanvasPixelData },
+  void,
+  {
+    // Optional fields for defining thunkApi field types
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("blurFinishInCanvas", (_, reduxApi) => {
+  return {
+    canvasPixelData: reduxApi.getState().canvasReducer.canvasPixelData,
+  };
+});
+
 const erase = createAsyncThunk<
   EraseCanvasPixelDataReturnValue,
   EraseCanvasPixelData
@@ -171,6 +185,7 @@ const lineEnd = createAsyncThunk<
 export const canvasThunkActions = {
   draw,
   blur,
+  blurFinish,
   erase,
   bucket,
   lineStart,

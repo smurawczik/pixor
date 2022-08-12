@@ -3,10 +3,10 @@ import { CANVAS_DIMENSION_MULTIPLIER } from "../../redux/canvas/canvas.constants
 
 export const CanvasTransparentBackground = styled.div`
   background-color: white;
-  background-image: linear-gradient(45deg, #b0b0b0 25%, transparent 25%),
-    linear-gradient(-45deg, #b0b0b0 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #b0b0b0 75%),
-    linear-gradient(-45deg, transparent 75%, #b0b0b0 75%);
+  background-image: linear-gradient(45deg, #ececec 25%, transparent 25%),
+    linear-gradient(-45deg, #ececec 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ececec 75%),
+    linear-gradient(-45deg, transparent 75%, #ececec 75%);
   background-size: ${CANVAS_DIMENSION_MULTIPLIER * 2}px
     ${CANVAS_DIMENSION_MULTIPLIER * 2}px;
   background-position: 0 0, 0 ${CANVAS_DIMENSION_MULTIPLIER}px,
