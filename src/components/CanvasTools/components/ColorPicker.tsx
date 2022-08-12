@@ -12,6 +12,7 @@ const StyledInputColor = styled(Button)`
     width: 40px;
     height: 40px;
     min-width: auto;
+    box-shadow: 0 0 0 2px #aaa;
 
     @media (min-width: ${LARGE_PC_BREAKPOINT}) {
       width: 60px;

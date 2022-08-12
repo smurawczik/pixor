@@ -6,8 +6,7 @@ export const ToolButton = styled(Button).withConfig({
 })<{ isSelected: boolean }>`
   && {
     box-shadow: 0 0 0 2px
-      ${({ isSelected, theme }) =>
-        isSelected ? theme.colors.primary : "transparent"};
+      ${({ isSelected, theme }) => (isSelected ? theme.colors.primary : "#aaa")};
     min-width: auto;
   }
 `;

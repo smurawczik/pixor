@@ -59,7 +59,7 @@ export const CanvasPreview = () => {
           setDataURL(previewCanvasRef.current.toDataURL("image/png", 1) ?? "");
         }
       }
-    }, 50)
+    }, 100)
   ).current;
 
   useEffect(() => {

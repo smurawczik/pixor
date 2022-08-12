@@ -1,5 +1,5 @@
-import { throttle } from "lodash";
-import { FC, useEffect, useRef } from "react";
+import { debounce } from "lodash";
+import { FC, useRef } from "react";
 import { useMedia } from "react-use";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../../constants";
@@ -45,8 +45,10 @@ export const Frame: FC<{ frame: AnimationFrame }> = ({ frame }) => {
 
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
-  const throttleDrawingInCanvas = useRef(
-    throttle((pixelData) => {
+  const debounceDrawingInCanvas = useRef(
+    debounce((pixelData) => {
+      console.log("entering");
+
       if (previewCanvasRef.current) {
         const previewCanvasContext = previewCanvasRef.current.getContext("2d");
 
@@ -71,12 +73,10 @@ export const Frame: FC<{ frame: AnimationFrame }> = ({ frame }) => {
           });
         }
       }
-    }, 50)
+    }, 150)
   ).current;
 
-  useEffect(() => {
-    throttleDrawingInCanvas(pixelData);
-  }, [pixelData, throttleDrawingInCanvas]);
+  debounceDrawingInCanvas(pixelData);
 
   return (
     <StyledFrame
