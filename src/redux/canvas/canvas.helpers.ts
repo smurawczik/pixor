@@ -41,6 +41,23 @@ export const generateNbyMObjectMatrix = (n: number, m: number) => {
   return matrix;
 };
 
+export const generateNbyMObjectMatrixWithPreviousData = (
+  n: number,
+  m: number,
+  previousMatrix: CanvasSliceState["canvasPixelData"]
+) => {
+  const matrix: CanvasSliceState["canvasPixelData"] = {};
+  for (let i = 1; i < n + 1; i++) {
+    if (!matrix[i]) matrix[i] = {};
+    for (let j = 1; j < m + 1; j++) {
+      if (previousMatrix?.[i]?.[j]?.color && !matrix[i][j])
+        matrix[i][j] = { color: previousMatrix[i][j].color };
+      else matrix[i][j] = { color: CANVAS_TRANSPARENT_COLOR };
+    }
+  }
+  return matrix;
+};
+
 export const floodFill = (
   x: number,
   y: number,

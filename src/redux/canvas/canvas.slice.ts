@@ -7,7 +7,10 @@ import {
   CANVAS_INITIAL_WIDTH,
   CANVAS_TRANSPARENT_COLOR,
 } from "./canvas.constants";
-import { generateNbyMObjectMatrix } from "./canvas.helpers";
+import {
+  generateNbyMObjectMatrix,
+  generateNbyMObjectMatrixWithPreviousData,
+} from "./canvas.helpers";
 import { lineMoving } from "./canvas.slice.helpers";
 import { canvasThunkActions } from "./canvas.thunks";
 import type {
@@ -60,17 +63,19 @@ export const canvasSlice = createSlice({
     setWidth: (state: CanvasSliceState, action: PayloadAction<number>) => {
       state.size.width = action.payload;
       state.pixelSize.width = state.size.width * CANVAS_DIMENSION_MULTIPLIER;
-      state.canvasPixelData = generateNbyMObjectMatrix(
+      state.canvasPixelData = generateNbyMObjectMatrixWithPreviousData(
         action.payload,
-        state.size.height
+        state.size.height,
+        state.canvasPixelData
       );
     },
     setHeight: (state: CanvasSliceState, action: PayloadAction<number>) => {
       state.size.height = action.payload;
       state.pixelSize.height = state.size.height * CANVAS_DIMENSION_MULTIPLIER;
-      state.canvasPixelData = generateNbyMObjectMatrix(
+      state.canvasPixelData = generateNbyMObjectMatrixWithPreviousData(
         state.size.width,
-        action.payload
+        action.payload,
+        state.canvasPixelData
       );
     },
     setCoords: (
