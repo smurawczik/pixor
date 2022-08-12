@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/pixor/static/js/main.c89c5cb4.js",
+    "index.html": "/pixor/index.html",
+    "main.c89c5cb4.js.map": "/pixor/static/js/main.c89c5cb4.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.c89c5cb4.js"
+  ]
+}
