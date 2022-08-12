@@ -68,7 +68,6 @@ export const floodFill = (
   nextColor: string
 ) => {
   // Check the boundary condition
-  // console.log({ x, y, previousColor, nextColor });
   if (x < 1 || x > xMax || y < 1 || y > yMax) return;
   if (matrix[x][y].color !== previousColor) return;
 

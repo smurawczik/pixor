@@ -105,7 +105,13 @@ export const canvasSlice = createSlice({
       const { x, y, color } = action.payload;
       if (!color) return;
 
-      if (!state.canvasPixelData[x]) state.canvasPixelData[x] = {};
+      state.canvasPixelData[x][y] = {
+        color,
+      };
+    });
+    builder.addCase(canvasThunkActions.blur.fulfilled, (state, action) => {
+      const { x, y, color } = action.payload;
+      if (!color) return;
 
       state.canvasPixelData[x][y] = {
         color,

@@ -15,6 +15,7 @@ import { canvasActions } from "../../../redux/canvas/canvas.slice";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toolsSelectors } from "../../../redux/tools/tools.selectors";
 import { ToolsEnum } from "../../../redux/tools/tools.types";
+import { useBlurTool } from "../../CanvasTools/hooks/useBlurTool";
 import { useBucketTool } from "../../CanvasTools/hooks/useBucketTool";
 import { useDrawTool } from "../../CanvasTools/hooks/useDrawTool";
 import { useEraseTool } from "../../CanvasTools/hooks/useEraseTool";
@@ -86,6 +87,10 @@ export const CanvasElement = () => {
     canvasContext: canvasRef.current?.getContext("2d"),
   });
 
+  const { blurPixelInCanvas } = useBlurTool({
+    canvasContext: canvasRef.current?.getContext("2d"),
+  });
+
   const { bucketPaint } = useBucketTool({
     canvasContext: canvasRef.current?.getContext("2d"),
   });
@@ -128,10 +133,14 @@ export const CanvasElement = () => {
           case ToolsEnum.LINE:
             onLineMove();
             break;
+          case ToolsEnum.BLUR:
+            blurPixelInCanvas();
+            break;
         }
       }
     },
     [
+      blurPixelInCanvas,
       bucketPaint,
       currentTool,
       drawInCanvas,

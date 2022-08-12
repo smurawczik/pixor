@@ -47,8 +47,6 @@ export const Frame: FC<{ frame: AnimationFrame }> = ({ frame }) => {
 
   const debounceDrawingInCanvas = useRef(
     debounce((pixelData) => {
-      console.log("entering");
-
       if (previewCanvasRef.current) {
         const previewCanvasContext = previewCanvasRef.current.getContext("2d");
 

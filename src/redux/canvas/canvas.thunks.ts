@@ -32,6 +32,24 @@ const draw = createAsyncThunk<
   };
 });
 
+const blur = createAsyncThunk<
+  DrawCanvasPixelDataReturnValue,
+  DrawCanvasPixelData,
+  {
+    // Optional fields for defining thunkApi field types
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("blurInCanvas", (canvasPixelData: DrawCanvasPixelData) => {
+  const { x, y, color } = canvasPixelData;
+
+  return {
+    x,
+    y,
+    color,
+  };
+});
+
 const erase = createAsyncThunk<
   EraseCanvasPixelDataReturnValue,
   EraseCanvasPixelData
@@ -152,6 +170,7 @@ const lineEnd = createAsyncThunk<
 
 export const canvasThunkActions = {
   draw,
+  blur,
   erase,
   bucket,
   lineStart,
