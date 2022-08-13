@@ -10,9 +10,8 @@ export const Frames = () => {
     <Box
       sx={{
         display: "flex",
-        flexWrap: "nowrap",
         overflow: "auto",
-        maxWidth: "520px",
+        maxWidth: "calc(100% - 220px)",
       }}
     >
       {frames.map((frame) => (

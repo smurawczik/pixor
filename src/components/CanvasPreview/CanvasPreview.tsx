@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { useMedia } from "react-use";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../constants";
-import { CANVAS_TRANSPARENT_COLOR } from "../../redux/canvas/canvas.constants";
+import {
+  CANVAS_EXTRA_REPRESENTATION_THROTTLE_TIME,
+  CANVAS_TRANSPARENT_COLOR,
+} from "../../redux/canvas/canvas.constants";
 import {
   clearAllCanvas,
   drawPixelInCanvas,
@@ -59,7 +62,7 @@ export const CanvasPreview = () => {
           setDataURL(previewCanvasRef.current.toDataURL("image/png", 1) ?? "");
         }
       }
-    }, 100)
+    }, CANVAS_EXTRA_REPRESENTATION_THROTTLE_TIME)
   ).current;
 
   useEffect(() => {

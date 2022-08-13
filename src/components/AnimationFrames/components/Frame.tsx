@@ -6,7 +6,10 @@ import { LARGE_PC_BREAKPOINT } from "../../../constants";
 import { animationSelectors } from "../../../redux/animation/animation.selectors";
 import { animationThunkActions } from "../../../redux/animation/animation.thunks";
 import { AnimationFrame } from "../../../redux/animation/animation.types";
-import { CANVAS_TRANSPARENT_COLOR } from "../../../redux/canvas/canvas.constants";
+import {
+  CANVAS_EXTRA_REPRESENTATION_THROTTLE_TIME,
+  CANVAS_TRANSPARENT_COLOR,
+} from "../../../redux/canvas/canvas.constants";
 import {
   clearAllCanvas,
   drawPixelInCanvas,
@@ -71,7 +74,7 @@ export const Frame: FC<{ frame: AnimationFrame }> = ({ frame }) => {
           });
         }
       }
-    }, 150)
+    }, CANVAS_EXTRA_REPRESENTATION_THROTTLE_TIME)
   ).current;
 
   debounceDrawingInCanvas(pixelData);

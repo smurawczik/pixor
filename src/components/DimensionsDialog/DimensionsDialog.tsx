@@ -1,4 +1,5 @@
 import { Box, TextField, Typography } from "@mui/material";
+import { CANVAS_MAX_DIMENSION_VALUE } from "../../redux/canvas/canvas.constants";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
 import { canvasActions } from "../../redux/canvas/canvas.slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -20,7 +21,8 @@ export const DimensionsDialog = () => {
         onChange={(event) => {
           const value = parseInt(event.target.value);
 
-          if (value <= 0) event.preventDefault();
+          if (value <= 0 || value > CANVAS_MAX_DIMENSION_VALUE)
+            event.preventDefault();
           else dispatch(canvasActions.setWidth(value));
         }}
         sx={{ mb: 2 }}
@@ -34,7 +36,8 @@ export const DimensionsDialog = () => {
         onChange={(event) => {
           const value = parseInt(event.target.value);
 
-          if (value <= 0) event.preventDefault();
+          if (value <= 0 || value > CANVAS_MAX_DIMENSION_VALUE)
+            event.preventDefault();
           else dispatch(canvasActions.setHeight(value));
         }}
         label="height"
