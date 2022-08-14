@@ -21,7 +21,7 @@ const StyledCanvasWrapper = styled.div`
 const StyledCanvasOverflowWrapper = styled.div`
   height: 100%;
   width: 100%;
-  overflow: scroll;
+  overflow: auto;
 `;
 
 export const Canvas = () => {

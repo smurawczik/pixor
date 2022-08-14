@@ -12,6 +12,7 @@ import {
 } from "../../../redux/canvas/canvas.paint.helpers";
 import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
 import { canvasActions } from "../../../redux/canvas/canvas.slice";
+import { CanvasPixelData } from "../../../redux/canvas/canvas.types";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toolsSelectors } from "../../../redux/tools/tools.selectors";
 import { ToolsEnum } from "../../../redux/tools/tools.types";
@@ -41,7 +42,7 @@ export const CanvasElement = () => {
   const currentTool = useAppSelector(toolsSelectors.getCurrentTool);
 
   const throttleDrawingInCanvas = useRef(
-    throttle((pixelData) => {
+    throttle((pixelData: CanvasPixelData) => {
       if (canvasRef.current) {
         const previewCanvasContext = canvasRef.current.getContext("2d");
 

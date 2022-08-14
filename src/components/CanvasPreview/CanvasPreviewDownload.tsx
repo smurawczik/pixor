@@ -1,10 +1,18 @@
 import { Button } from "@mui/material";
-import { FC } from "react";
+import { FC, useCallback } from "react";
+import { CanvasDownloadSize } from "../../redux/canvas/canvas.types";
 
 export const CanvasPreviewDownload: FC<{
   dataURL: string;
+  downloadOption: CanvasDownloadSize;
 }> = ({ dataURL }) => {
-  if (!dataURL) return null;
+  const onDownload = useCallback(() => {
+    var a = document.createElement("a");
+    a.href = dataURL;
+    a.download = "preview.png";
+    document.body.appendChild(a);
+    a.click();
+  }, [dataURL]);
 
   return (
     <Button
@@ -13,13 +21,7 @@ export const CanvasPreviewDownload: FC<{
       disableElevation
       color="secondary"
       sx={{ mt: 1 }}
-      onClick={() => {
-        var a = document.createElement("a");
-        a.href = dataURL;
-        a.download = "preview.png";
-        document.body.appendChild(a);
-        a.click();
-      }}
+      onClick={onDownload}
     >
       Download
     </Button>

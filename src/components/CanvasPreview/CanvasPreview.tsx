@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { throttle } from "lodash";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useMedia } from "react-use";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../constants";
@@ -13,8 +13,10 @@ import {
   drawPixelInCanvas,
 } from "../../redux/canvas/canvas.paint.helpers";
 import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
+import { CanvasDownloadSize } from "../../redux/canvas/canvas.types";
 import { useAppSelector } from "../../redux/hooks";
 import { CanvasPreviewDownload } from "./CanvasPreviewDownload";
+import { CanvasPreviewDownloadOptions } from "./CanvasPreviewDownloadOptions";
 
 const StyledCanvas = styled.canvas`
   z-index: 1;
@@ -29,10 +31,17 @@ export const CanvasPreview = () => {
   const canvasDimensions = useAppSelector(canvasSelectors.dimensions);
   const isLargeScreen = useMedia(`(min-width: ${LARGE_PC_BREAKPOINT})`);
   const [dataURL, setDataURL] = useState("");
-
-  const CANVAS_PREVIEW_MULTIPLIER = isLargeScreen ? 5 : 3;
+  const [downloadOption, setDownloadOption] = useState<CanvasDownloadSize>(
+    CanvasDownloadSize.ORIGINAL
+  );
 
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  const CANVAS_PREVIEW_MULTIPLIER = isLargeScreen ? 3 : 2;
+
+  const onDownloadOptionChange = useCallback((option: CanvasDownloadSize) => {
+    setDownloadOption(option);
+  }, []);
 
   const throttleDrawingInCanvas = useRef(
     throttle((pixelData) => {
@@ -81,7 +90,13 @@ export const CanvasPreview = () => {
           height={canvasDimensions.height * CANVAS_PREVIEW_MULTIPLIER}
         ></StyledCanvas>
       </Box>
-      <CanvasPreviewDownload dataURL={dataURL} />
+      <CanvasPreviewDownloadOptions
+        onDownloadOptionChange={onDownloadOptionChange}
+      />
+      <CanvasPreviewDownload
+        downloadOption={downloadOption}
+        dataURL={dataURL}
+      />
     </Box>
   );
 };
