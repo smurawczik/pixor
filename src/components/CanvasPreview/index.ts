@@ -1,1 +1,1 @@
-export { CanvasPreview } from "./CanvasPreview";
+export { CanvasPreview } from "./components/CanvasPreview";

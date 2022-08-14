@@ -1,6 +1,7 @@
 import { throttle } from "lodash";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
+import { useCanvasElementContext } from "../../../context/canvas";
 import {
   CANVAS_DIMENSION_MULTIPLIER,
   CANVAS_TRANSPARENT_COLOR,
@@ -40,6 +41,7 @@ export const CanvasElement = () => {
   const coordinates = useAppSelector(canvasSelectors.coordinates);
   const canvasPixelData = useAppSelector(canvasSelectors.getPixelData);
   const currentTool = useAppSelector(toolsSelectors.getCurrentTool);
+  const { dispatch: canvasElementDispatch } = useCanvasElementContext();
 
   const throttleDrawingInCanvas = useRef(
     throttle((pixelData: CanvasPixelData) => {
@@ -122,7 +124,7 @@ export const CanvasElement = () => {
   );
 
   const throttleSettingCoordinates = useMemo(
-    () => throttle(setNewCoordinates, 15),
+    () => throttle(setNewCoordinates, 5),
     [setNewCoordinates]
   );
 
@@ -160,7 +162,7 @@ export const CanvasElement = () => {
   );
 
   const throttleCanvasAction = useMemo(
-    () => throttle(canvasAction, 15),
+    () => throttle(canvasAction, 5),
     [canvasAction]
   );
 
@@ -194,6 +196,14 @@ export const CanvasElement = () => {
   useEffect(() => {
     throttleDrawingInCanvas(canvasPixelData);
   }, [canvasPixelData, throttleDrawingInCanvas]);
+
+  useEffect(() => {
+    canvasElementDispatch({
+      type: "SET_CANVAS_ELEMENT",
+      canvasElement: canvasRef.current,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <StyledCanvas

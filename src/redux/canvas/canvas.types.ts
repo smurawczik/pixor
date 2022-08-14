@@ -3,7 +3,6 @@ import { AsyncThunk } from "@reduxjs/toolkit";
 export enum CanvasDownloadSize {
   ORIGINAL = 1,
   DOUBLE,
-  QUADRUPLE,
 }
 
 export type CanvasSize = {

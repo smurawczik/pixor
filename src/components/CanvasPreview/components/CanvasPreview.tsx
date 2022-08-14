@@ -1,20 +1,17 @@
 import { Box, Typography } from "@mui/material";
-import { throttle } from "lodash";
+import { debounce } from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMedia } from "react-use";
 import styled from "styled-components";
-import { LARGE_PC_BREAKPOINT } from "../../constants";
-import {
-  CANVAS_EXTRA_REPRESENTATION_THROTTLE_TIME,
-  CANVAS_TRANSPARENT_COLOR,
-} from "../../redux/canvas/canvas.constants";
+import { LARGE_PC_BREAKPOINT } from "../../../constants";
+import { CANVAS_TRANSPARENT_COLOR } from "../../../redux/canvas/canvas.constants";
 import {
   clearAllCanvas,
   drawPixelInCanvas,
-} from "../../redux/canvas/canvas.paint.helpers";
-import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
-import { CanvasDownloadSize } from "../../redux/canvas/canvas.types";
-import { useAppSelector } from "../../redux/hooks";
+} from "../../../redux/canvas/canvas.paint.helpers";
+import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
+import { CanvasDownloadSize } from "../../../redux/canvas/canvas.types";
+import { useAppSelector } from "../../../redux/hooks";
 import { CanvasPreviewDownload } from "./CanvasPreviewDownload";
 import { CanvasPreviewDownloadOptions } from "./CanvasPreviewDownloadOptions";
 
@@ -30,7 +27,6 @@ export const CanvasPreview = () => {
   const canvasPixelData = useAppSelector(canvasSelectors.getPixelData);
   const canvasDimensions = useAppSelector(canvasSelectors.dimensions);
   const isLargeScreen = useMedia(`(min-width: ${LARGE_PC_BREAKPOINT})`);
-  const [dataURL, setDataURL] = useState("");
   const [downloadOption, setDownloadOption] = useState<CanvasDownloadSize>(
     CanvasDownloadSize.ORIGINAL
   );
@@ -43,8 +39,8 @@ export const CanvasPreview = () => {
     setDownloadOption(option);
   }, []);
 
-  const throttleDrawingInCanvas = useRef(
-    throttle((pixelData) => {
+  const debounceDrawingInCanvas = useRef(
+    debounce((pixelData) => {
       if (previewCanvasRef.current) {
         const previewCanvasContext = previewCanvasRef.current.getContext("2d");
 
@@ -67,16 +63,14 @@ export const CanvasPreview = () => {
               }
             });
           });
-
-          setDataURL(previewCanvasRef.current.toDataURL("image/png", 1) ?? "");
         }
       }
-    }, CANVAS_EXTRA_REPRESENTATION_THROTTLE_TIME)
+    }, 250)
   ).current;
 
   useEffect(() => {
-    throttleDrawingInCanvas(canvasPixelData);
-  }, [canvasPixelData, throttleDrawingInCanvas]);
+    debounceDrawingInCanvas(canvasPixelData);
+  }, [canvasPixelData, debounceDrawingInCanvas]);
 
   return (
     <Box display="flex" flexDirection="column">
@@ -93,10 +87,7 @@ export const CanvasPreview = () => {
       <CanvasPreviewDownloadOptions
         onDownloadOptionChange={onDownloadOptionChange}
       />
-      <CanvasPreviewDownload
-        downloadOption={downloadOption}
-        dataURL={dataURL}
-      />
+      <CanvasPreviewDownload downloadOption={downloadOption} />
     </Box>
   );
 };

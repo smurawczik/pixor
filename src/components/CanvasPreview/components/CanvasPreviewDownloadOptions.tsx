@@ -8,13 +8,13 @@ import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import { FC, Fragment, useMemo, useRef, useState } from "react";
-import { useAppSelector } from "../../redux/hooks";
-import { canvasSelectors } from "../../redux/canvas/canvas.selectors";
-import { CanvasDownloadSize } from "../../redux/canvas/canvas.types";
+import { CanvasDownloadSize } from "../../../redux/canvas/canvas.types";
+import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
+import { useAppSelector } from "../../../redux/hooks";
 
 export const CanvasPreviewDownloadOptions: FC<{
   onDownloadOptionChange: (optionId: CanvasDownloadSize) => void;
-}> = ({ onDownloadOptionChange: onClick }) => {
+}> = ({ onDownloadOptionChange }) => {
   const { height, width } = useAppSelector(canvasSelectors.dimensions);
   const options = useMemo(
     () => [
@@ -22,10 +22,6 @@ export const CanvasPreviewDownloadOptions: FC<{
       {
         label: `size: ${width * 2} x ${height * 2}`,
         id: CanvasDownloadSize.DOUBLE,
-      },
-      {
-        label: `size: ${width * 4} x ${height * 4}`,
-        id: CanvasDownloadSize.QUADRUPLE,
       },
     ],
     [height, width]
@@ -35,13 +31,14 @@ export const CanvasPreviewDownloadOptions: FC<{
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleClick = () => {
-    onClick(options[selectedIndex].id);
+    onDownloadOptionChange(options[selectedIndex].id);
   };
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number
   ) => {
+    onDownloadOptionChange(options[index].id);
     setSelectedIndex(index);
     setOpen(false);
   };

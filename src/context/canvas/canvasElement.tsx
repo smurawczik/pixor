@@ -1,4 +1,4 @@
-import React, { createContext, FC, useReducer } from "react";
+import React, { createContext, FC, useMemo, useReducer } from "react";
 import { canvasElementContextReducer } from "./canvasElement.reducer";
 import {
   CanvasElementContextDispatch,
@@ -16,7 +16,13 @@ export const CanvasElementProvider: FC<{ children: React.ReactNode }> = ({
   const [state, dispatch] = useReducer(canvasElementContextReducer, {
     canvasElement: null,
   });
-  const value = { state, dispatch };
+  const value = useMemo(
+    () => ({
+      state,
+      dispatch,
+    }),
+    [state]
+  );
 
   return (
     <CanvasElementContext.Provider value={value}>

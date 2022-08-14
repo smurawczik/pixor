@@ -2,6 +2,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { indigo, purple } from "@mui/material/colors";
 import React, { FC } from "react";
 import { Provider } from "react-redux";
+import { CanvasElementProvider } from "../../context/canvas";
 import { store } from "../../redux/store";
 import { Theme } from "../UI/Theme";
 
@@ -16,7 +17,9 @@ export const Providers: FC<{ children: React.ReactNode }> = ({ children }) => {
       })}
     >
       <Theme>
-        <Provider store={store}>{children}</Provider>
+        <CanvasElementProvider>
+          <Provider store={store}>{children}</Provider>
+        </CanvasElementProvider>
       </Theme>
     </ThemeProvider>
   );
