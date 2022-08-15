@@ -108,6 +108,12 @@ export const canvasSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(canvasThunkActions.clearCanvas.fulfilled, (state, action) => {
+        state.canvasPixelData = generateNbyMObjectMatrix(
+          state.size.width,
+          state.size.width
+        );
+      })
       .addCase(canvasThunkActions.draw.fulfilled, (state, action) => {
         const { x, y, color } = action.payload;
         if (!color) return;

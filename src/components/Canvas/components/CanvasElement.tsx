@@ -19,6 +19,7 @@ import { toolsSelectors } from "../../../redux/tools/tools.selectors";
 import { ToolsEnum } from "../../../redux/tools/tools.types";
 import { useBlurTool } from "../../CanvasTools/hooks/useBlurTool";
 import { useBucketTool } from "../../CanvasTools/hooks/useBucketTool";
+import { useClearCanvasTool } from "../../CanvasTools/hooks/useClearCanvasTool";
 import { useDrawTool } from "../../CanvasTools/hooks/useDrawTool";
 import { useEraseTool } from "../../CanvasTools/hooks/useEraseTool";
 import { useLineTool } from "../../CanvasTools/hooks/useLineTool";
@@ -80,6 +81,11 @@ export const CanvasElement = () => {
   ).current;
 
   const { isPenDown, putPenUp, putPenDown } = usePenTool();
+
+  const { clearCanvas } = useClearCanvasTool({
+    canvasContext: canvasRef.current?.getContext("2d"),
+    isPenDown: true,
+  });
 
   const { onLineStart, onLineMove, onLineEnd } = useLineTool({
     canvasContext: canvasRef.current?.getContext("2d"),
@@ -147,12 +153,16 @@ export const CanvasElement = () => {
           case ToolsEnum.BLUR:
             blurPixelInCanvas();
             break;
+          case ToolsEnum.CLEAR:
+            clearCanvas();
+            break;
         }
       }
     },
     [
       blurPixelInCanvas,
       bucketPaint,
+      clearCanvas,
       currentTool,
       drawInCanvas,
       eraseFromCanvas,

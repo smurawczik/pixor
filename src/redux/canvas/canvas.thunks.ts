@@ -73,6 +73,8 @@ const erase = createAsyncThunk<
   return { x, y };
 });
 
+const clearCanvas = createAsyncThunk("clearCanvas", () => {});
+
 // @refactor
 const bucket = createAsyncThunk<
   CanvasPixelData,
@@ -187,6 +189,7 @@ export const canvasThunkActions = {
   blur,
   blurFinish,
   erase,
+  clearCanvas,
   bucket,
   lineStart,
   lineMove,

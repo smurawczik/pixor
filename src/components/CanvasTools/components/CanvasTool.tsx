@@ -1,4 +1,4 @@
-import { IconButtonProps } from "@mui/material";
+import { IconButtonProps, Tooltip } from "@mui/material";
 import { FC } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toolsSelectors } from "../../../redux/tools/tools.selectors";
@@ -15,11 +15,13 @@ export const CanvasTool: FC<CanvasToolProps> = ({ tool, children }) => {
   const dispatch = useAppDispatch();
   const isSelected = useAppSelector(toolsSelectors.isToolSelected(tool));
   return (
-    <ToolButton
-      isSelected={isSelected}
-      onClick={() => dispatch(toolsActions.selectTool(tool))}
-    >
-      {children}
-    </ToolButton>
+    <Tooltip title={tool}>
+      <ToolButton
+        isSelected={isSelected}
+        onClick={() => dispatch(toolsActions.selectTool(tool))}
+      >
+        {children}
+      </ToolButton>
+    </Tooltip>
   );
 };

@@ -18,7 +18,9 @@ export const CanvasPreviewDownload: FC<{
     setIsImageDownloading(true);
     downloadImage(canvasElement, downloadOption, canvasDimensions).finally(
       () => {
-        setIsImageDownloading(false);
+        setTimeout(() => {
+          setIsImageDownloading(false);
+        }, 1000);
       }
     );
   }, [canvasDimensions, canvasElement, downloadOption]);
@@ -33,7 +35,7 @@ export const CanvasPreviewDownload: FC<{
       onClick={onDownload}
     >
       Download
-      {isImageDownloading && <CircularProgress />}
+      {isImageDownloading && <CircularProgress size={18} sx={{ ml: 1.5 }} />}
     </Button>
   );
 };

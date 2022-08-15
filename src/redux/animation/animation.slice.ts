@@ -44,6 +44,12 @@ export const animationSlice = createSlice({
         },
       };
     });
+    builder.addCase(canvasThunkActions.clearCanvas.fulfilled, (state) => {
+      state.frames[state.selectedFrame] = {
+        ...state.frames[state.selectedFrame],
+        pixelData: {},
+      };
+    });
     builder.addCase(
       canvasThunkActions.blurFinish.fulfilled,
       (state, action) => {

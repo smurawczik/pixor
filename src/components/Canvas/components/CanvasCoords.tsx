@@ -1,3 +1,4 @@
+import { Box } from "@mui/system";
 import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
 import { useAppSelector } from "../../../redux/hooks";
 
@@ -6,12 +7,13 @@ export const CanvasCoords = () => {
 
   return (
     <div>
-      <div>
-        x: <b>{x ? x : "-"}</b>
-      </div>
-      <div>
-        y: <b>{y ? y : "-"}</b>
-      </div>
+      <span>
+        x: <b>{x ? (x < 10 ? "0" + x : x) : "00"}</b>
+      </span>
+      <Box sx={{ mx: 1, display: "inline-block" }} />
+      <span>
+        y: <b>{y ? (y < 10 ? "0" + y : y) : "00"}</b>
+      </span>
     </div>
   );
 };

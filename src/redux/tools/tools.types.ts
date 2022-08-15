@@ -1,9 +1,10 @@
 export enum ToolsEnum {
-  PENCIL = 1,
-  ERASER,
-  BUCKET,
-  BLUR,
-  LINE,
+  PENCIL = "Draw",
+  ERASER = "Erase",
+  BUCKET = "Paint",
+  BLUR = "Blur",
+  LINE = "Draw Line",
+  CLEAR = "Clear Canvas",
 }
 
 export interface ToolsSliceState {

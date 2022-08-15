@@ -9,6 +9,7 @@ import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import styled from "styled-components";
 import { Typography } from "@mui/material";
 import { LARGE_PC_BREAKPOINT } from "../../../constants";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 const EditingTools = styled.div`
   display: grid;
@@ -40,6 +41,9 @@ export const CanvasTools = () => {
         </CanvasTool>
         <CanvasTool size="small" tool={ToolsEnum.BLUR}>
           <BlurOnIcon />
+        </CanvasTool>
+        <CanvasTool size="small" tool={ToolsEnum.CLEAR}>
+          <HighlightOffIcon />
         </CanvasTool>
         <CanvasTool size="small" tool={ToolsEnum.LINE}>
           <HorizontalRuleIcon

@@ -72,7 +72,7 @@ export const downloadImage = (
       const fileNamePrompt = await prompt(
         "Write a filename (default is preview)"
       );
-      a.download = `${fileNamePrompt}.png` ?? "preview.png";
+      a.download = fileNamePrompt ? `${fileNamePrompt}.png` : "preview.png";
       document.body.appendChild(a);
       a.click();
       resolve("downloading");
