@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "https://smurawczik.github.io/pixor/static/js/main.86f13ecc.js",
+    "main.js": "https://smurawczik.github.io/pixor/static/js/main.1c032fc2.js",
     "index.html": "https://smurawczik.github.io/pixor/index.html",
-    "main.86f13ecc.js.map": "https://smurawczik.github.io/pixor/static/js/main.86f13ecc.js.map"
+    "main.1c032fc2.js.map": "https://smurawczik.github.io/pixor/static/js/main.1c032fc2.js.map"
   },
   "entrypoints": [
-    "static/js/main.86f13ecc.js"
+    "static/js/main.1c032fc2.js"
   ]
 }
