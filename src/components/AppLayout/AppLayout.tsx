@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../constants";
+import { AppMenu } from "../AppMenu";
 import { Canvas } from "../Canvas";
 import { CanvasAnimation } from "../CanvasAnimation";
 import { CanvasPalette } from "../CanvasPalette/CanvasPalette";
@@ -57,6 +58,7 @@ const StyledCanvasPaneWrapper = styled.div`
 export const AppLayout = () => {
   return (
     <StyledAppLayout>
+      <AppMenu />
       <StyledAppThreeMainPanelsLayout>
         <StyledAppLeftPanelWrapper>
           <Box sx={{ m: 2 }}>

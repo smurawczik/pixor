@@ -1,4 +1,4 @@
-import { throttle } from "lodash";
+import { debounce, throttle } from "lodash";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
 import { useCanvasElementContext } from "../../../context/canvas";
@@ -42,7 +42,10 @@ export const CanvasElement = () => {
   const coordinates = useAppSelector(canvasSelectors.coordinates);
   const canvasPixelData = useAppSelector(canvasSelectors.getPixelData);
   const currentTool = useAppSelector(toolsSelectors.getCurrentTool);
-  const { dispatch: canvasElementDispatch } = useCanvasElementContext();
+  const {
+    dispatch: canvasContextDispatch,
+    state: { canvasElement },
+  } = useCanvasElementContext();
 
   const throttleDrawingInCanvas = useRef(
     throttle((pixelData: CanvasPixelData) => {
@@ -207,13 +210,34 @@ export const CanvasElement = () => {
     throttleDrawingInCanvas(canvasPixelData);
   }, [canvasPixelData, throttleDrawingInCanvas]);
 
+  // debounce set data URL in context
+
+  const debounceChangeDataURL = useRef(
+    debounce(() => {
+      const canvasDataURL = canvasRef.current?.toDataURL("image/png", 1);
+      if (canvasDataURL) {
+        canvasContextDispatch({
+          type: "SET_CANVAS_URL",
+          dataURL: canvasDataURL,
+        });
+      }
+    }, 250)
+  ).current;
+
   useEffect(() => {
-    canvasElementDispatch({
-      type: "SET_CANVAS_ELEMENT",
-      canvasElement: canvasRef.current,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    debounceChangeDataURL();
+  }, [debounceChangeDataURL, canvasPixelData]);
+
+  // debounce set data URL in context
+
+  useEffect(() => {
+    if (canvasRef.current && !canvasElement) {
+      canvasContextDispatch({
+        type: "SET_CANVAS_ELEMENT",
+        canvasElement: canvasRef.current,
+      });
+    }
+  }, [canvasContextDispatch, canvasElement]);
 
   return (
     <StyledCanvas

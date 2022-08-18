@@ -1,1 +1,2 @@
 export const SET_CANVAS_ELEMENT = "SET_CANVAS_ELEMENT";
+export const SET_CANVAS_URL = "SET_CANVAS_URL";

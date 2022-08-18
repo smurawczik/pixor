@@ -1,4 +1,4 @@
-import { SET_CANVAS_ELEMENT } from "./canvasElement.constants";
+import { SET_CANVAS_ELEMENT, SET_CANVAS_URL } from "./canvasElement.constants";
 import {
   CanvasElementContextState,
   CanvasElementContextActions,
@@ -11,7 +11,14 @@ export const canvasElementContextReducer = (
   switch (action.type) {
     case SET_CANVAS_ELEMENT: {
       return {
+        ...state,
         canvasElement: action.canvasElement,
+      };
+    }
+    case SET_CANVAS_URL: {
+      return {
+        ...state,
+        dataURL: action.dataURL,
       };
     }
     default: {

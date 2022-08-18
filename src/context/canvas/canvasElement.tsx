@@ -15,6 +15,7 @@ export const CanvasElementProvider: FC<{ children: React.ReactNode }> = ({
 }) => {
   const [state, dispatch] = useReducer(canvasElementContextReducer, {
     canvasElement: null,
+    dataURL: "",
   });
   const value = useMemo(
     () => ({
