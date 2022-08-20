@@ -21,23 +21,13 @@ const StyledAppLayout = styled.div`
   height: 100%;
 `;
 
-const StyledAppThreeMainPanelsLayout = styled.div<{ changeGrid: boolean }>`
-  ${({ changeGrid }) =>
-    changeGrid
-      ? "display: flex;"
-      : "display: grid; grid-template-columns: 125px 1fr minmax(max-content, 125px);"}
-  flex-grow: 1.5;
-
-  @media (min-width: ${LARGE_PC_BREAKPOINT}) {
-    ${({ changeGrid }) =>
-      changeGrid
-        ? "display: flex;"
-        : "display: grid; grid-template-columns: 125px 1fr minmax(max-content, 200px);"}
-  }
+const StyledAppThreeMainPanelsLayout = styled.div`
+  display: flex;
+  flex-grow: 2;
 `;
 
 const StyledAppAnimationLayer = styled.div<PaneVisibility>`
-  ${({ visible }) => (visible ? "display: block;" : "display: none;")}
+  display: ${({ visible }) => (visible ? "block" : "none")};
   min-height: 60px;
   border-top: 2px solid indigo;
 
@@ -47,17 +37,21 @@ const StyledAppAnimationLayer = styled.div<PaneVisibility>`
 `;
 
 const StyledAppLeftPanelWrapper = styled.div<PaneVisibility>`
-  ${({ visible }) => (visible ? "display: flex;" : "display: none;")}
+  display: ${({ visible }) => (visible ? "flex" : "none")};
   z-index: 2;
   flex-direction: column;
   align-items: center;
+  min-width: 100px;
+  max-width: 180px;
 `;
 
 const StyledAppRightPanelWrapper = styled.div<PaneVisibility>`
-  ${({ visible }) => (visible ? "display: flex;" : "display: none;")}
+  display: ${({ visible }) => (visible ? "flex" : "none")};
   z-index: 2;
   flex-direction: column;
   align-items: flex-start;
+  min-width: 100px;
+  max-width: 180px;
 `;
 
 const StyledCanvasPaneWrapper = styled.div`
@@ -65,7 +59,7 @@ const StyledCanvasPaneWrapper = styled.div`
   border-right: 2px solid indigo;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex-grow: 2;
 `;
 
 export const AppLayout = () => {
@@ -75,9 +69,7 @@ export const AppLayout = () => {
   return (
     <StyledAppLayout>
       <AppMenu />
-      <StyledAppThreeMainPanelsLayout
-        changeGrid={!toolsPane.visible || !helpersPane.visible}
-      >
+      <StyledAppThreeMainPanelsLayout>
         <StyledAppLeftPanelWrapper visible={toolsPane.visible}>
           <Box sx={{ m: 2 }}>
             <DimensionsDialog />

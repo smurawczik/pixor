@@ -4,7 +4,7 @@ import { AppLayout } from "./components/AppLayout";
 const StyledApp = styled.div`
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow: auto;
 `;
 
 function App() {

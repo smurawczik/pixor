@@ -19,7 +19,7 @@ const EditingTools = styled.div`
 
   @media (min-width: ${LARGE_PC_BREAKPOINT}) {
     grid-template-columns: 60px 60px;
-    grid-template-rows: 60px 60px;
+    grid-auto-rows: 60px;
   }
 `;
 

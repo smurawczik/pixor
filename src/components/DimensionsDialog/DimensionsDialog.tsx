@@ -18,6 +18,7 @@ export const DimensionsDialog = () => {
         placeholder="width"
         value={dimensions.width}
         variant="outlined"
+        fullWidth
         onChange={(event) => {
           const value = parseInt(event.target.value);
 
@@ -33,6 +34,7 @@ export const DimensionsDialog = () => {
         placeholder="height"
         value={dimensions.height}
         variant="outlined"
+        fullWidth
         onChange={(event) => {
           const value = parseInt(event.target.value);
 
