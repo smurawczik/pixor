@@ -19,7 +19,7 @@ const selectFrame = createAsyncThunk<
   }
 >("selectAnimationFrame", ({ frameNumberToSelect }, reduxApi) => {
   const nextSelectedFrame =
-    reduxApi.getState().animationReducer.frames[frameNumberToSelect];
+    reduxApi.getState().animation.frames[frameNumberToSelect];
 
   return {
     frameToSelect: nextSelectedFrame,
@@ -36,8 +36,8 @@ const selectNextFrame = createAsyncThunk<
   }
 >("selectNextAnimationFrame", ({ frameNumberToSelect }, reduxApi) => {
   const nextSelectedFrame =
-    reduxApi.getState().animationReducer.frames?.[frameNumberToSelect] ??
-    reduxApi.getState().animationReducer.frames[0];
+    reduxApi.getState().animation.frames?.[frameNumberToSelect] ??
+    reduxApi.getState().animation.frames[0];
 
   return {
     frameToSelect: nextSelectedFrame,
@@ -71,8 +71,7 @@ const duplicateFrame = createAsyncThunk<
     state: RootState;
   }
 >("duplicateAnimationFrame", ({ frameNumberToDuplicate }, reduxApi) => {
-  const frame =
-    reduxApi.getState().animationReducer.frames[frameNumberToDuplicate];
+  const frame = reduxApi.getState().animation.frames[frameNumberToDuplicate];
 
   return {
     frameToDuplicate: { ...frame, id: nanoid(5), index: frame.index + 1 },

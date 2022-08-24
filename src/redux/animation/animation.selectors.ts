@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { AnimationSliceState } from "./animation.types";
 
-const animationState = (state: RootState) => state.animationReducer;
+const animationState = (state: RootState) => state.animation;
 const playState = createSelector(
   animationState,
   (state: AnimationSliceState) => state.playState

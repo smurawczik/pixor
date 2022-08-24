@@ -60,7 +60,7 @@ const blurFinish = createAsyncThunk<
   }
 >("blurFinishInCanvas", (_, reduxApi) => {
   return {
-    canvasPixelData: reduxApi.getState().canvasReducer.canvasPixelData,
+    canvasPixelData: reduxApi.getState().canvas.canvasPixelData,
   };
 });
 
@@ -87,7 +87,7 @@ const bucket = createAsyncThunk<
 >("paintWithBucket", (newPixelData: DrawCanvasPixelData, reduxApi) => {
   const { x, y, color } = newPixelData;
 
-  const { canvasPixelData, size } = reduxApi.getState().canvasReducer;
+  const { canvasPixelData, size } = reduxApi.getState().canvas;
 
   const clonedCanvasPixelData = cloneDeep<CanvasPixelData>(canvasPixelData);
 
@@ -123,8 +123,7 @@ const lineMove = createAsyncThunk<
 >("lineMove", (newPixelData: DrawCanvasPixelData, reduxApi) => {
   const { x, y, color } = newPixelData;
 
-  const { drawingLineData, canvasPixelData } =
-    reduxApi.getState().canvasReducer;
+  const { drawingLineData, canvasPixelData } = reduxApi.getState().canvas;
   const clonedCanvasPixelData = cloneDeep<CanvasPixelData>(canvasPixelData);
 
   if (drawingLineData) {
@@ -163,8 +162,7 @@ const lineEnd = createAsyncThunk<
 >("lineEnd", (newPixelData: DrawCanvasPixelData, reduxApi) => {
   const { x, y, canvasContext, color } = newPixelData;
 
-  const { drawingLineData, canvasPixelData } =
-    reduxApi.getState().canvasReducer;
+  const { drawingLineData, canvasPixelData } = reduxApi.getState().canvas;
 
   const clonedCanvasPixelData = cloneDeep(canvasPixelData);
 

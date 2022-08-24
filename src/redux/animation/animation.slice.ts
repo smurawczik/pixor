@@ -1,6 +1,7 @@
 import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { CANVAS_TRANSPARENT_COLOR } from "../canvas/canvas.constants";
 import { canvasThunkActions } from "../canvas/canvas.thunks";
+import { storeThunkActions } from "../store.thunk";
 import { animationThunkActions } from "./animation.thunks";
 import { AnimationPlayState, AnimationSliceState } from "./animation.types";
 
@@ -134,6 +135,16 @@ export const animationSlice = createSlice({
       animationThunkActions.selectNextFrame.fulfilled,
       (state, action) => {
         state.selectedFrame = action.payload.frameToSelect.index;
+      }
+    );
+
+    builder.addCase(
+      storeThunkActions.restoreFromFileData.fulfilled,
+      (state, action) => {
+        const { frames, playState, selectedFrame } = action.payload.animation;
+        state.frames = frames;
+        state.playState = playState;
+        state.selectedFrame = selectedFrame;
       }
     );
   },

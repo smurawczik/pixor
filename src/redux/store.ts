@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import canvasReducer from "./canvas/canvas.slice";
-import toolsReducer from "./tools/tools.slice";
-import animationReducer from "./animation/animation.slice";
-import layoutReducer from "./layout/layout.slice";
+import canvas from "./canvas/canvas.slice";
+import tools from "./tools/tools.slice";
+import animation from "./animation/animation.slice";
+import layout from "./layout/layout.slice";
 
 export const store = configureStore({
   reducer: {
-    canvasReducer,
-    toolsReducer,
-    animationReducer,
-    layoutReducer,
+    canvas,
+    tools,
+    animation,
+    layout,
   },
 });
 

@@ -1,27 +1,27 @@
 import { RootState } from "../store";
 
 const dimensions = (state: RootState) => {
-  return state.canvasReducer.size;
+  return state.canvas.size;
 };
 
 const pixelDimensions = (state: RootState) => {
-  return state.canvasReducer.pixelSize;
+  return state.canvas.pixelSize;
 };
 
 const coordinates = (state: RootState) => {
-  return state.canvasReducer.coords;
+  return state.canvas.coords;
 };
 
 const currentColor = (state: RootState) => {
-  return state.canvasReducer.palette.currentColor;
+  return state.canvas.palette.currentColor;
 };
 
 const getAllColors = (state: RootState) => {
-  return state.canvasReducer.palette.allColors;
+  return state.canvas.palette.allColors;
 };
 
 const getPixelData = (state: RootState) => {
-  return state.canvasReducer.canvasPixelData;
+  return state.canvas.canvasPixelData;
 };
 
 export const canvasSelectors = {

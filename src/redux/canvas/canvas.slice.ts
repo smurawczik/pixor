@@ -1,3 +1,4 @@
+import { storeThunkActions } from "./../store.thunk";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import chroma from "chroma-js";
 import { clone } from "lodash";
@@ -219,7 +220,27 @@ export const canvasSlice = createSlice({
           state.size.width,
           state.size.height
         );
-      });
+      })
+      .addCase(
+        storeThunkActions.restoreFromFileData.fulfilled,
+        (state, action) => {
+          const {
+            canvasPixelData,
+            coords,
+            palette,
+            pixelSize,
+            size,
+            drawingLineData,
+          } = action.payload.canvas;
+
+          state.canvasPixelData = canvasPixelData;
+          state.coords = coords;
+          state.palette = palette;
+          state.pixelSize = pixelSize;
+          state.size = size;
+          state.drawingLineData = drawingLineData;
+        }
+      );
   },
 });
 

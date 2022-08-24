@@ -2,23 +2,23 @@ import { RootState } from "../store";
 import { ToolsEnum } from "./tools.types";
 
 const isPencilSelected = (state: RootState) => {
-  return state.toolsReducer.selectedTool === ToolsEnum.PENCIL;
+  return state.tools.selectedTool === ToolsEnum.PENCIL;
 };
 
 const isEraserSelected = (state: RootState) => {
-  return state.toolsReducer.selectedTool === ToolsEnum.ERASER;
+  return state.tools.selectedTool === ToolsEnum.ERASER;
 };
 
 const isBucketSelected = (state: RootState) => {
-  return state.toolsReducer.selectedTool === ToolsEnum.BUCKET;
+  return state.tools.selectedTool === ToolsEnum.BUCKET;
 };
 
 const getCurrentTool = (state: RootState) => {
-  return state.toolsReducer.selectedTool;
+  return state.tools.selectedTool;
 };
 
 const isToolSelected = (tool: ToolsEnum) => (state: RootState) => {
-  return state.toolsReducer.selectedTool === tool;
+  return state.tools.selectedTool === tool;
 };
 
 export const toolsSelectors = {
