@@ -26,19 +26,21 @@ const StyledAppThreeMainPanelsLayout = styled("div")`
   flex-grow: 2;
 `;
 
-const StyledAppAnimationLayer = styled("div")<PaneVisibility>(
-  ({ theme, visible }) => ({
-    display: visible ? "block" : "none",
-    minHeight: "60px",
-    borderTop: `2px solid ${theme.palette.primary.light}`,
+const StyledAppAnimationLayer = styled("div", {
+  shouldForwardProp: (prop) => prop !== "visible",
+})<PaneVisibility>(({ theme, visible }) => ({
+  display: visible ? "block" : "none",
+  minHeight: "60px",
+  borderTop: `2px solid ${theme.palette.primary.light}`,
 
-    [`@media (min-width: ${LARGE_PC_BREAKPOINT})`]: {
-      minHeight: "100px",
-    },
-  })
-);
+  [`@media (min-width: ${LARGE_PC_BREAKPOINT})`]: {
+    minHeight: "100px",
+  },
+}));
 
-const StyledAppLeftPanelWrapper = styled("div")<PaneVisibility>`
+const StyledAppLeftPanelWrapper = styled("div", {
+  shouldForwardProp: (prop) => prop !== "visible",
+})<PaneVisibility>`
   display: ${({ visible }) => (visible ? "flex" : "none")};
   z-index: 2;
   flex-direction: column;
@@ -47,7 +49,9 @@ const StyledAppLeftPanelWrapper = styled("div")<PaneVisibility>`
   max-width: 180px;
 `;
 
-const StyledAppRightPanelWrapper = styled("div")<PaneVisibility>`
+const StyledAppRightPanelWrapper = styled("div", {
+  shouldForwardProp: (prop) => prop !== "visible",
+})<PaneVisibility>`
   display: ${({ visible }) => (visible ? "flex" : "none")};
   z-index: 2;
   flex-direction: column;

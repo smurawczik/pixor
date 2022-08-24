@@ -25,11 +25,13 @@ const StyledCanvas = styled("canvas")`
   image-rendering: crisp-edges;
 `;
 
-const StyledFrame = styled("div")<{ isFrameSelected: boolean }>`
+const StyledFrame = styled("div", {
+  shouldForwardProp: (prop) => prop !== "isFrameSelected",
+})<{ isFrameSelected: boolean }>`
   border: ${({ theme, isFrameSelected }) =>
     isFrameSelected
-      ? `2px solid ${theme.palette.common.white}`
-      : `2px solid ${theme.palette.secondary.main}`};
+      ? `2px solid ${theme.palette.secondary.main}`
+      : `2px solid ${theme.palette.common.white}`};
   background-color: rgba(255, 255, 255, 0.75);
   margin-left: 8px;
   margin-right: 8px;

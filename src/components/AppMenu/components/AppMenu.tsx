@@ -9,7 +9,7 @@ export const AppMenu = () => {
         <Box>
           <FileMenu />
         </Box>
-        <Box sx={{ ml: 1 }}>
+        <Box sx={{ ml: 2 }}>
           <ViewsMenu />
         </Box>
       </Toolbar>
