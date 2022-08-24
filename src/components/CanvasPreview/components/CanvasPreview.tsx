@@ -30,7 +30,11 @@ export const CanvasPreview = () => {
       <Typography gutterBottom variant="h6" sx={{ mt: 2, alignSelf: "start" }}>
         Preview
       </Typography>
-      <Box border="1px solid black" display="inline-flex">
+      <Box
+        border="1px solid black"
+        display="inline-flex"
+        sx={{ bgcolor: "common.white" }}
+      >
         {dataURL && (
           <img
             src={dataURL}

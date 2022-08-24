@@ -19,6 +19,7 @@ export const FileMenu = () => {
         size="small"
         disableElevation
         onClick={handleClick}
+        color="secondary"
       >
         File
       </Button>

@@ -14,6 +14,7 @@ export const DimensionsDialog = () => {
         Dimensions
       </Typography>
       <TextField
+        size="small"
         type="number"
         placeholder="width"
         value={dimensions.width}
@@ -30,6 +31,7 @@ export const DimensionsDialog = () => {
         label="width"
       />
       <TextField
+        size="small"
         type="number"
         placeholder="height"
         value={dimensions.height}

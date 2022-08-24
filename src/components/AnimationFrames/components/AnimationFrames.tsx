@@ -1,18 +1,18 @@
-import styled from "styled-components";
+import { styled } from "@mui/material";
 import { AddFrameButton } from "./AddFrameButton";
 import { DuplicateFrameButton } from "./DuplicateFrameButton";
 import { Frames } from "./Frames";
 
-const StyledAnimationFrames = styled.div`
+const StyledAnimationFrames = styled("div")`
   height: 100%;
   display: flex;
   align-items: center;
   padding: 16px;
-  border-left: 2px solid indigo;
+  border-left: 2px solid ${({ theme }) => theme.palette.primary.light};
   width: 100%;
 `;
 
-const StyledFrameButtons = styled.div`
+const StyledFrameButtons = styled("div")`
   display: flex;
 `;
 

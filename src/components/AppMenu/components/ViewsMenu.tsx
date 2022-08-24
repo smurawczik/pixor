@@ -19,6 +19,7 @@ export const ViewsMenu = () => {
         size="small"
         disableElevation
         onClick={handleClick}
+        color="secondary"
       >
         Views
       </Button>

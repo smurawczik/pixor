@@ -1,7 +1,7 @@
+import { styled } from "@mui/material";
 import { debounce } from "lodash";
 import { FC, useRef } from "react";
 import { useMedia } from "react-use";
-import styled from "styled-components";
 import { LARGE_PC_BREAKPOINT } from "../../../constants";
 import { animationSelectors } from "../../../redux/animation/animation.selectors";
 import { animationThunkActions } from "../../../redux/animation/animation.thunks";
@@ -17,7 +17,7 @@ import {
 import { canvasSelectors } from "../../../redux/canvas/canvas.selectors";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 
-const StyledCanvas = styled.canvas`
+const StyledCanvas = styled("canvas")`
   z-index: 1;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
@@ -25,9 +25,12 @@ const StyledCanvas = styled.canvas`
   image-rendering: crisp-edges;
 `;
 
-const StyledFrame = styled.div<{ isFrameSelected: boolean }>`
-  border: ${({ isFrameSelected }) =>
-    isFrameSelected ? "2px solid red" : "2px solid black"};
+const StyledFrame = styled("div")<{ isFrameSelected: boolean }>`
+  border: ${({ theme, isFrameSelected }) =>
+    isFrameSelected
+      ? `2px solid ${theme.palette.common.white}`
+      : `2px solid ${theme.palette.secondary.main}`};
+  background-color: rgba(255, 255, 255, 0.75);
   margin-left: 8px;
   margin-right: 8px;
   display: inline-flex;
