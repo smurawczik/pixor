@@ -5,7 +5,7 @@ import { FC, useCallback } from "react";
 import { canvasActions } from "../../../redux/canvas/canvas.slice";
 import { useAppDispatch } from "../../../redux/hooks";
 
-export const EditMenuOptions: FC<{
+export const ImageMenuOptions: FC<{
   onClose: () => void;
   open: boolean;
   anchorEl: HTMLElement | null;
@@ -26,10 +26,7 @@ export const EditMenuOptions: FC<{
       }}
     >
       <MenuItem onClick={handleOptionClick}>
-        <ListItemText>undo</ListItemText>
-      </MenuItem>
-      <MenuItem onClick={handleOptionClick}>
-        <ListItemText>redo</ListItemText>
+        <ListItemText>image grayscale</ListItemText>
       </MenuItem>
     </Menu>
   );

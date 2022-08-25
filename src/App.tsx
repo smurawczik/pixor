@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { AppLayout } from "./components/AppLayout";
+import { Providers } from "./components/Providers";
+import { GlobalStyle } from "./styles/GlobalStyle";
 
 const StyledApp = styled.div`
   height: 100vh;
@@ -9,9 +11,12 @@ const StyledApp = styled.div`
 
 function App() {
   return (
-    <StyledApp>
-      <AppLayout />
-    </StyledApp>
+    <Providers>
+      <StyledApp>
+        <GlobalStyle />
+        <AppLayout />
+      </StyledApp>
+    </Providers>
   );
 }
 
