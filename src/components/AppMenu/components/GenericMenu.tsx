@@ -1,8 +1,14 @@
 import Button from "@mui/material/Button";
-import { SyntheticEvent, useState } from "react";
-import { FileMenuOptions } from "./FileMenu.Options";
+import React, { FC, SyntheticEvent, useState } from "react";
 
-export const FileMenu = () => {
+export const GenericMenu: FC<{
+  name: string;
+  MenuListComponent: FC<{
+    onClose: () => void;
+    open: boolean;
+    anchorEl: HTMLElement | null;
+  }>;
+}> = ({ name, MenuListComponent }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: SyntheticEvent<HTMLButtonElement>) => {
@@ -15,15 +21,18 @@ export const FileMenu = () => {
   return (
     <div>
       <Button
-        variant="contained"
         size="small"
         disableElevation
         onClick={handleClick}
-        color="secondary"
+        color="primary"
       >
-        File
+        {name}
       </Button>
-      <FileMenuOptions onClose={handleClose} open={open} anchorEl={anchorEl} />
+      <MenuListComponent
+        onClose={handleClose}
+        open={open}
+        anchorEl={anchorEl}
+      />
     </div>
   );
 };

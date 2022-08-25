@@ -106,6 +106,30 @@ export const canvasSlice = createSlice({
 
       state.palette.allColors.push(action.payload);
     },
+    changeToGrayscale: (state: CanvasSliceState) => {
+      const pixelData = state.canvasPixelData;
+      Object.keys(pixelData).forEach((xKey) => {
+        const xIndex = parseInt(xKey);
+        Object.keys(pixelData[xIndex]).forEach((yKey) => {
+          const yIndex = parseInt(yKey);
+          if (
+            pixelData?.[xIndex]?.[yIndex].color !== CANVAS_TRANSPARENT_COLOR
+          ) {
+            const chromaColorRGB = chroma(
+              pixelData?.[xIndex]?.[yIndex].color
+            ).rgb();
+            const grayedColor =
+              (chromaColorRGB[0] + chromaColorRGB[1] + chromaColorRGB[2]) / 3;
+            pixelData[xIndex][yIndex].color = chroma(
+              grayedColor,
+              grayedColor,
+              grayedColor
+            ).hex();
+          }
+        });
+      });
+      state.canvasPixelData = pixelData;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -224,21 +248,7 @@ export const canvasSlice = createSlice({
       .addCase(
         storeThunkActions.restoreFromFileData.fulfilled,
         (state, action) => {
-          const {
-            canvasPixelData,
-            coords,
-            palette,
-            pixelSize,
-            size,
-            drawingLineData,
-          } = action.payload.canvas;
-
-          state.canvasPixelData = canvasPixelData;
-          state.coords = coords;
-          state.palette = palette;
-          state.pixelSize = pixelSize;
-          state.size = size;
-          state.drawingLineData = drawingLineData;
+          return action.payload.canvas;
         }
       );
   },

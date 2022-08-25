@@ -141,10 +141,7 @@ export const animationSlice = createSlice({
     builder.addCase(
       storeThunkActions.restoreFromFileData.fulfilled,
       (state, action) => {
-        const { frames, playState, selectedFrame } = action.payload.animation;
-        state.frames = frames;
-        state.playState = playState;
-        state.selectedFrame = selectedFrame;
+        return action.payload.animation;
       }
     );
   },

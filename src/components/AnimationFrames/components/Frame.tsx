@@ -97,7 +97,7 @@ export const Frame: FC<{ frame: AnimationFrame }> = ({ frame }) => {
         ref={previewCanvasRef}
         width={canvasDimensions.width * CANVAS_PREVIEW_MULTIPLIER}
         height={canvasDimensions.height * CANVAS_PREVIEW_MULTIPLIER}
-      ></StyledCanvas>
+      />
     </StyledFrame>
   );
 };
