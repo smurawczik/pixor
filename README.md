@@ -2,6 +2,8 @@
 
 Open [https://smurawczik.github.io/pixor/](https://smurawczik.github.io/pixor/) and enjoy
 
+
+
 ## Available Scripts
 
 In the project directory, you can run:
