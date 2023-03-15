@@ -2,8 +2,6 @@
 
 Open [https://smurawczik.github.io/pixor/](https://smurawczik.github.io/pixor/) and enjoy
 
-### Project created with CRA and Redux Toolkit
-
 ## Available Scripts
 
 In the project directory, you can run:
